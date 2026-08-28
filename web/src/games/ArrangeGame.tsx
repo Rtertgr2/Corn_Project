@@ -268,7 +268,7 @@ export default function ArrangeGame({ onComplete }: { onComplete: (correct: bool
                   aspectRatio: '1',
                   border: isSelected ? '3px solid var(--color-primary)' : '2px solid var(--color-border)',
                   borderRadius: 'var(--radius-sm)',
-                  background: 'var(--color-card)',
+                  background: cell ? color.fill : 'var(--color-card)',
                   cursor: animating ? 'default' : 'pointer',
                   transition: 'all 0.15s ease',
                   transform: isSelected ? 'scale(1.1)' : isMatched ? 'scale(0.8)' : 'scale(1)',
@@ -282,28 +282,7 @@ export default function ArrangeGame({ onComplete }: { onComplete: (correct: bool
                 }}
               >
                 {cell && (
-                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-                    {/* ใบข้าวโพดซ้าย */}
-                    <path d="M10 8 Q6 4 8 1 Q10 4 12 7" fill={color.leaf} stroke={color.leaf} strokeWidth="0.5"/>
-                    {/* ใบข้าวโพดขวา */}
-                    <path d="M22 8 Q26 4 24 1 Q22 4 20 7" fill={color.leaf} stroke={color.leaf} strokeWidth="0.5"/>
-                    {/* ฝักข้าวโพด */}
-                    <ellipse cx="16" cy="18" rx="7" ry="10" fill={color.fill} stroke={color.stroke} strokeWidth="1.5"/>
-                    {/* เมล็ดแถวซ้าย */}
-                    <circle cx="12" cy="14" r="2" fill={color.stroke} opacity="0.6"/>
-                    <circle cx="12" cy="18" r="2" fill={color.stroke} opacity="0.6"/>
-                    <circle cx="12" cy="22" r="2" fill={color.stroke} opacity="0.6"/>
-                    {/* เมล็ดแถวกลาง */}
-                    <circle cx="16" cy="13" r="2" fill={color.stroke} opacity="0.6"/>
-                    <circle cx="16" cy="17" r="2" fill={color.stroke} opacity="0.6"/>
-                    <circle cx="16" cy="21" r="2" fill={color.stroke} opacity="0.6"/>
-                    {/* เมล็ดแถวขวา */}
-                    <circle cx="20" cy="14" r="2" fill={color.stroke} opacity="0.6"/>
-                    <circle cx="20" cy="18" r="2" fill={color.stroke} opacity="0.6"/>
-                    <circle cx="20" cy="22" r="2" fill={color.stroke} opacity="0.6"/>
-                    {/* ปลายฝัก */}
-                    <path d="M14 28 Q16 31 18 28" stroke={color.stroke} strokeWidth="1.2" fill="none" strokeLinecap="round"/>
-                  </svg>
+                  <span style={{ fontSize: '1.8rem', lineHeight: 1 }}>🌽</span>
                 )}
               </button>
             );
@@ -315,14 +294,16 @@ export default function ArrangeGame({ onComplete }: { onComplete: (correct: bool
       <div style={{ display: 'flex', gap: 8, marginTop: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
         {COLORS.map((c, i) => (
           <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.7rem', color: 'var(--color-muted-foreground)' }}>
-            <svg width="16" height="16" viewBox="0 0 32 32" fill="none">
-              <path d="M10 8 Q6 4 8 1 Q10 4 12 7" fill={c.leaf}/>
-              <path d="M22 8 Q26 4 24 1 Q22 4 20 7" fill={c.leaf}/>
-              <ellipse cx="16" cy="18" rx="7" ry="10" fill={c.fill} stroke={c.stroke} strokeWidth="1.5"/>
-              <circle cx="14" cy="16" r="1.8" fill={c.stroke} opacity="0.6"/>
-              <circle cx="18" cy="16" r="1.8" fill={c.stroke} opacity="0.6"/>
-              <circle cx="16" cy="20" r="1.8" fill={c.stroke} opacity="0.6"/>
-            </svg>
+            <span style={{ 
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 24,
+              height: 24,
+              background: c.fill,
+              border: '1px solid var(--color-border)',
+              fontSize: '0.8rem'
+            }}>🌽</span>
             {c.label}
           </div>
         ))}
