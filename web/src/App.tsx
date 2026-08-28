@@ -2,6 +2,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { usePhone } from './PhoneContext';
 import PhoneView from './views/PhoneView';
+import GameSelectView from './views/GameSelectView';
 import PlayView from './views/PlayView';
 import RewardsView from './views/RewardsView';
 import MeView from './views/MeView';
@@ -20,7 +21,8 @@ export default function App() {
       </header>
       <Routes>
         <Route path="/" element={<PhoneView />} />
-        <Route path="/play" element={<RequirePhone><PlayView /></RequirePhone>} />
+        <Route path="/play" element={<RequirePhone><GameSelectView /></RequirePhone>} />
+        <Route path="/play/:gameId" element={<RequirePhone><PlayView /></RequirePhone>} />
         <Route path="/rewards" element={<RequirePhone><RewardsView /></RequirePhone>} />
         <Route path="/me" element={<RequirePhone><MeView /></RequirePhone>} />
       </Routes>

@@ -2,9 +2,9 @@
 import { Router } from 'express';
 import { pool } from '../db.ts';
 import { validatePhone } from '../util.ts';
-import { dateBKK, hashDailyGame } from '../daily.ts';
+import { dateBKK } from '../daily.ts';
 import { computeBalanceFromRows } from '../points.ts';
-import { isValidGameId, GAME_IDS } from '../games.ts';
+import { isValidGameId } from '../games.ts';
 
 export const playRouter = Router();
 
@@ -18,10 +18,6 @@ playRouter.post('/play', async (req, res) => {
   if (!isValidGameId(gameId)) return res.status(400).json({ error: 'game_id ไม่รู้จัก' });
 
   const today = dateBKK();
-  const expected = hashDailyGame(phone, today, GAME_IDS);
-  if (gameId !== expected) {
-    return res.status(400).json({ error: 'เกมวันนี้ไม่ตรงกับที่กำหนด' });
-  }
 
   const { rows: p } = await pool.query('SELECT id FROM players WHERE phone=$1', [phone]);
   if (p.length === 0) return res.status(400).json({ error: 'กรุณากรอกเบอร์ก่อนเล่น' });

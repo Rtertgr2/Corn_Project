@@ -2,9 +2,8 @@
 import { Router } from 'express';
 import { pool } from '../db.ts';
 import { validatePhone } from '../util.ts';
-import { dateBKK, hashDailyGame } from '../daily.ts';
+import { dateBKK } from '../daily.ts';
 import { computeBalanceFromRows } from '../points.ts';
-import { GAME_IDS } from '../games.ts';
 
 export const playerRouter = Router();
 
@@ -28,7 +27,6 @@ playerRouter.post('/start', async (req, res) => {
     [playerId, today],
   );
   const playedToday = todayPlays.length > 0;
-  const todayGame = playedToday ? todayPlays[0].game_id : hashDailyGame(phone, today, GAME_IDS);
 
   const { rows: plays } = await pool.query('SELECT points_awarded FROM plays WHERE player_id=$1', [playerId]);
   const { rows: reds } = await pool.query('SELECT cost_points FROM redemptions WHERE player_id=$1', [playerId]);
@@ -37,7 +35,7 @@ playerRouter.post('/start', async (req, res) => {
   res.json({
     balance,
     todayPlayed: playedToday,
-    todayGame,
+    todayGame: playedToday ? todayPlays[0].game_id : null,
     todayCorrect: playedToday ? todayPlays[0].correct : null,
   });
 });
