@@ -1,0 +1,494 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Work+Sans:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* Design Tokens — Yingcharoen Game Hub */
+  --color-primary: #7C3AED;
+  --color-on-primary: #FFFFFF;
+  --color-secondary: #A78BFA;
+  --color-on-secondary: #0F172A;
+  --color-accent: #16A34A;
+  --color-on-accent: #FFFFFF;
+  --color-background: #FAF5FF;
+  --color-foreground: #4C1D95;
+  --color-card: #FFFFFF;
+  --color-card-foreground: #4C1D95;
+  --color-muted: #ECEEF9;
+  --color-muted-foreground: #475569;
+  --color-border: #DDD6FE;
+  --color-destructive: #DC2626;
+  --color-on-destructive: #FFFFFF;
+  --color-ring: #7C3AED;
+
+  /* Typography */
+  --font-heading: 'Outfit', system-ui, sans-serif;
+  --font-body: 'Work Sans', system-ui, sans-serif;
+
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(76, 29, 149, 0.06);
+  --shadow-md: 0 4px 12px rgba(76, 29, 149, 0.08);
+  --shadow-lg: 0 8px 24px rgba(76, 29, 149, 0.12);
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-normal: 200ms ease;
+  --transition-slow: 300ms ease;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--color-background);
+  color: var(--color-foreground);
+  line-height: 1.5;
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: contain;
+}
+
+#root {
+  min-height: 100dvh;
+}
+
+/* App Shell */
+.app-shell {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: var(--space-md);
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-header {
+  text-align: center;
+  padding: var(--space-lg) 0 var(--space-md);
+}
+
+.app-header h1 {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  letter-spacing: -0.02em;
+}
+
+.app-header .subtitle {
+  font-size: 0.85rem;
+  color: var(--color-muted-foreground);
+  margin-top: var(--space-xs);
+}
+
+/* Cards */
+.card {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition-normal);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  min-height: 48px;
+  min-width: 48px;
+  padding: 12px 20px;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  text-decoration: none;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn:focus-visible {
+  outline: 3px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #6D28D9;
+  box-shadow: var(--shadow-md);
+}
+
+.btn-accent {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}
+
+.btn-accent:hover:not(:disabled) {
+  background: #15803D;
+  box-shadow: var(--shadow-md);
+}
+
+.btn-secondary {
+  background: var(--color-muted);
+  color: var(--color-foreground);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: #DDD6FE;
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--color-primary);
+  border: 2px solid var(--color-border);
+}
+
+.btn-outline:hover:not(:disabled) {
+  border-color: var(--color-primary);
+  background: rgba(124, 58, 237, 0.05);
+}
+
+.btn-block {
+  width: 100%;
+}
+
+.btn-sm {
+  min-height: 40px;
+  padding: 8px 14px;
+  font-size: 0.875rem;
+}
+
+.btn-lg {
+  min-height: 56px;
+  padding: 16px 28px;
+  font-size: 1.125rem;
+}
+
+/* Inputs */
+.input {
+  width: 100%;
+  padding: 14px 16px;
+  font-family: var(--font-body);
+  font-size: 1.125rem;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-card);
+  color: var(--color-foreground);
+  transition: border-color var(--transition-fast);
+  -webkit-appearance: none;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+}
+
+.input::placeholder {
+  color: var(--color-muted-foreground);
+  opacity: 0.6;
+}
+
+/* Game Options */
+.game-option {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 52px;
+  padding: 14px 18px;
+  margin: var(--space-sm) 0;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 500;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-card);
+  color: var(--color-foreground);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  -webkit-tap-highlight-color: transparent;
+  text-align: left;
+}
+
+.game-option:hover:not(:disabled) {
+  border-color: var(--color-primary);
+  background: rgba(124, 58, 237, 0.04);
+  box-shadow: var(--shadow-sm);
+}
+
+.game-option:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.game-option:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.game-option.selected {
+  border-color: var(--color-primary);
+  background: rgba(124, 58, 237, 0.08);
+}
+
+.game-option.correct {
+  border-color: var(--color-accent);
+  background: rgba(22, 163, 74, 0.08);
+}
+
+.game-option.wrong {
+  border-color: var(--color-destructive);
+  background: rgba(220, 38, 38, 0.06);
+}
+
+/* Reward Card */
+.reward-card {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  margin: var(--space-md) 0;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+}
+
+.reward-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.reward-card .reward-name {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-foreground);
+}
+
+.reward-card .reward-desc {
+  font-size: 0.85rem;
+  color: var(--color-muted-foreground);
+  margin: var(--space-xs) 0 var(--space-sm);
+}
+
+.reward-card .reward-cost {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--color-primary);
+  font-size: 1.1rem;
+}
+
+/* Points Badge */
+.points-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 6px 14px;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  color: var(--color-on-primary);
+  border-radius: var(--radius-full);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.9rem;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Status Messages */
+.msg-success {
+  padding: 12px 16px;
+  background: rgba(22, 163, 74, 0.1);
+  border: 1px solid rgba(22, 163, 74, 0.2);
+  border-radius: var(--radius-md);
+  color: #15803D;
+  font-weight: 500;
+  text-align: center;
+}
+
+.msg-error {
+  padding: 12px 16px;
+  background: rgba(220, 38, 38, 0.08);
+  border: 1px solid rgba(220, 38, 38, 0.15);
+  border-radius: var(--radius-md);
+  color: var(--color-destructive);
+  font-weight: 500;
+  text-align: center;
+}
+
+.msg-info {
+  padding: 12px 16px;
+  background: rgba(124, 58, 237, 0.08);
+  border: 1px solid rgba(124, 58, 237, 0.15);
+  border-radius: var(--radius-md);
+  color: var(--color-primary);
+  font-weight: 500;
+  text-align: center;
+}
+
+/* Loading Skeleton */
+.skeleton {
+  background: linear-gradient(90deg, var(--color-muted) 25%, #f0ebff 50%, var(--color-muted) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+  border-radius: var(--radius-sm);
+}
+
+@keyframes skeleton-pulse {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton-text {
+  height: 16px;
+  margin: 8px 0;
+}
+
+.skeleton-title {
+  height: 24px;
+  width: 60%;
+  margin: 12px 0;
+}
+
+.skeleton-btn {
+  height: 48px;
+  width: 100%;
+  margin: 12px 0;
+}
+
+/* History List */
+.history-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--color-muted);
+  font-size: 0.9rem;
+}
+
+.history-item:last-child {
+  border-bottom: none;
+}
+
+/* Coupon Code */
+.coupon-code {
+  display: inline-block;
+  padding: 8px 16px;
+  background: var(--color-muted);
+  border: 2px dashed var(--color-primary);
+  border-radius: var(--radius-md);
+  font-family: 'Courier New', monospace;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  letter-spacing: 0.05em;
+}
+
+/* Section Title */
+.section-title {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-foreground);
+  margin: var(--space-lg) 0 var(--space-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+/* Nav Buttons Row */
+.nav-row {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+  flex-wrap: wrap;
+}
+
+.nav-row .btn {
+  flex: 1;
+  min-width: 120px;
+}
+
+/* Result Screen */
+.result-screen {
+  text-align: center;
+  padding: var(--space-xl) 0;
+}
+
+.result-screen .result-icon {
+  font-size: 3rem;
+  margin-bottom: var(--space-md);
+}
+
+.result-screen .result-text {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-foreground);
+  margin-bottom: var(--space-sm);
+}
+
+.result-screen .result-sub {
+  font-size: 1rem;
+  color: var(--color-muted-foreground);
+  margin-bottom: var(--space-lg);
+}
+
+/* Responsive */
+@media (max-width: 374px) {
+  .app-shell {
+    padding: var(--space-sm);
+  }
+  .btn {
+    font-size: 0.9rem;
+    padding: 10px 16px;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

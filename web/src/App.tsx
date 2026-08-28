@@ -13,8 +13,11 @@ function RequirePhone({ children }: { children: JSX.Element }) {
 
 export default function App() {
   return (
-    <div style={{ maxWidth: 480, margin: '0 auto', padding: 16, fontFamily: 'system-ui, sans-serif' }}>
-      <h2 style={{ textAlign: 'center', marginBottom: 16 }}>🌽 ตลาดยิ่งเจริญ</h2>
+    <div className="app-shell">
+      <header className="app-header">
+        <h1>🌽 ตลาดยิ่งเจริญ</h1>
+        <p className="subtitle">เล่นเกมสะสมแต้ม แลกของรางวัล</p>
+      </header>
       <Routes>
         <Route path="/" element={<PhoneView />} />
         <Route path="/play" element={<RequirePhone><PlayView /></RequirePhone>} />
