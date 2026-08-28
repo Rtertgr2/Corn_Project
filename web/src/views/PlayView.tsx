@@ -24,14 +24,9 @@ export default function PlayView() {
     }
     api.start(phone).then((r) => {
       setBalance(r.balance);
-      if (r.todayPlayed) {
-        setPlayed(true);
-      }
+      if (r.todayPlayed) setPlayed(true);
       setLoading(false);
-    }).catch((e) => {
-      setMsg(e.message);
-      setLoading(false);
-    });
+    }).catch((e) => { setMsg(e.message); setLoading(false); });
   }, [phone, gameId, gameEntry, nav]);
 
   if (loading) {
@@ -44,9 +39,7 @@ export default function PlayView() {
     );
   }
 
-  if (!gameEntry || !Game) {
-    return <p className="msg-error">ไม่พบเกมนี้</p>;
-  }
+  if (!gameEntry || !Game) return <p className="msg-error">ไม่พบเกมนี้</p>;
 
   if (played) {
     return (
@@ -69,16 +62,12 @@ export default function PlayView() {
     try {
       const r = await api.play(phone, gameId!, correct);
       setMsg(`ได้ 1 แต้ม! ยอดรวม ${r.balance}`);
-      setPlayed(true);
-      setBalance(r.balance);
-    } catch (e: any) {
-      setMsg(e.message);
-    }
+      setPlayed(true); setBalance(r.balance);
+    } catch (e: any) { setMsg(e.message); }
   };
 
   return (
     <div>
-      {/* Game HUD */}
       <div className="points-hud">
         <button className="btn btn-sm btn-ghost" onClick={() => nav('/play')}>
           ← เปลี่ยนเกม

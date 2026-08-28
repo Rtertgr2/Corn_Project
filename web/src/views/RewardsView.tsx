@@ -19,19 +19,12 @@ export default function RewardsView() {
   useEffect(() => { load(); }, [phone]);
 
   const redeem = async (reward_id: number) => {
-    setMsg('');
-    setRedeeming(reward_id);
+    setMsg(''); setRedeeming(reward_id);
     try {
       const r = await api.redeem(phone, reward_id);
-      setMsg(r.coupon_code);
-      setIsSuccess(true);
-      load();
-    } catch (e: any) {
-      setMsg(e.message);
-      setIsSuccess(false);
-    } finally {
-      setRedeeming(null);
-    }
+      setMsg(r.coupon_code); setIsSuccess(true); load();
+    } catch (e: any) { setMsg(e.message); setIsSuccess(false); }
+    finally { setRedeeming(null); }
   };
 
   if (!data) {
@@ -46,7 +39,6 @@ export default function RewardsView() {
 
   return (
     <div>
-      {/* Points HUD */}
       <div className="points-hud">
         <div className="points-left">
           <div className="points-icon">⭐</div>

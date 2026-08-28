@@ -12,17 +12,13 @@ export default function PhoneView() {
   const nav = useNavigate();
 
   const submit = async () => {
-    setErr('');
-    setLoading(true);
+    setErr(''); setLoading(true);
     try {
       await api.start(phone);
       setPhone(phone.trim());
       nav('/play');
-    } catch (e: any) {
-      setErr(e.message);
-    } finally {
-      setLoading(false);
-    }
+    } catch (e: any) { setErr(e.message); }
+    finally { setLoading(false); }
   };
 
   return (
@@ -34,15 +30,15 @@ export default function PhoneView() {
           <line x1="9" y1="9" x2="9.01" y2="9"/>
           <line x1="15" y1="9" x2="15.01" y2="9"/>
         </svg>
-        <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.25rem', fontWeight: 600, color: 'var(--color-foreground)' }}>
+        <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-text)' }}>
           พร้อมเล่นเกมวันนี้หรือยัง?
         </h2>
-        <p style={{ fontSize: '0.9rem', color: 'var(--color-muted-foreground)', marginTop: 'var(--space-xs)' }}>
+        <p style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)', marginTop: 'var(--space-xs)' }}>
           กรอกเบอร์โทรเพื่อเริ่มสะสมแต้ม
         </p>
       </div>
 
-      <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 500, color: 'var(--color-muted-foreground)', marginBottom: 'var(--space-xs)' }}>
+      <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text-muted)', marginBottom: 'var(--space-xs)' }}>
         เบอร์โทรศัพท์
       </label>
       <input
@@ -71,7 +67,7 @@ export default function PhoneView() {
             กำลังโหลด...
           </span>
         ) : (
-          'เริ่มเล่นเกม'
+          '🌽 เริ่มเล่นเกม'
         )}
       </button>
 

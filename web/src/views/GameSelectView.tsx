@@ -67,7 +67,6 @@ export default function GameSelectView() {
         <div className="streak">🔥 1 วัน</div>
       </div>
 
-      {/* Section */}
       <h2 className="section-title"><span className="icon">🎮</span> เลือกเกมที่อยากเล่น</h2>
       <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginBottom: 'var(--space-md)' }}>
         เล่นได้วันละ 1 เกม ได้ 1 แต้มต่อเกม

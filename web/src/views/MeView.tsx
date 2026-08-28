@@ -28,32 +28,22 @@ export default function MeView() {
 
   return (
     <div>
-      {/* Profile Header */}
       <div className="card" style={{ textAlign: 'center', marginBottom: 'var(--space-md)' }}>
         <div style={{ 
-          width: 64, 
-          height: 64, 
-          borderRadius: 'var(--radius-full)', 
+          width: 64, height: 64, borderRadius: 'var(--radius-full)', 
           background: 'linear-gradient(135deg, var(--color-primary), var(--color-primary-light))',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          margin: '0 auto var(--space-md)',
-          fontSize: '2rem',
-          boxShadow: 'var(--shadow-md)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          margin: '0 auto var(--space-md)', fontSize: '2rem', boxShadow: 'var(--shadow-md)',
         }}>
           👤
         </div>
         <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>{phone}</p>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 'var(--space-sm)', marginTop: 'var(--space-sm)' }}>
           <span className="level-badge">{level}</span>
-          <span style={{ fontWeight: 700, color: 'var(--color-text)' }}>
-            ผู้เล่นเลเวล {level}
-          </span>
+          <span style={{ fontWeight: 700, color: 'var(--color-text)' }}>ผู้เล่นเลเวล {level}</span>
         </div>
       </div>
 
-      {/* Quick Stats */}
       <div className="quick-stats">
         <div className="quick-stat">
           <div className="stat-value">{data.balance}</div>
@@ -69,7 +59,6 @@ export default function MeView() {
         </div>
       </div>
 
-      {/* Play History */}
       <div className="card" style={{ marginBottom: 'var(--space-md)' }}>
         <h3 className="section-title" style={{ marginTop: 0 }}><span className="icon">📜</span> ประวัติการเล่น</h3>
         {data.history.length === 0 ? (
@@ -87,7 +76,6 @@ export default function MeView() {
         )}
       </div>
 
-      {/* Coupons */}
       <div className="card">
         <h3 className="section-title" style={{ marginTop: 0 }}><span className="icon">🎫</span> คูปองที่แลก</h3>
         {data.redemptions.length === 0 ? (
