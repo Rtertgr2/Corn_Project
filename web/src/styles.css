@@ -115,13 +115,13 @@ body {
 .app-header .mascot {
   font-size: 3rem;
   margin-bottom: var(--space-sm);
-  animation: blink 1s step-end infinite;
+  animation: mascot-bob 3s ease-in-out infinite;
   display: inline-block;
 }
 
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
+@keyframes mascot-bob {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-6px) rotate(3deg); }
 }
 
 .app-header h1 {

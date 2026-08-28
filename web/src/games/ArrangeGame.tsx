@@ -13,13 +13,13 @@ const MIN_MATCH = 3;
 const MAX_MOVES = 20;
 const SCORE_TARGET = 150;
 
-// สีข้าวโพดแต่ละชนิด
+// สีข้าวโพดแต่ละชนิด (fill = พื้นหลังช่อง, filter = ปรับสีตัว 🌽)
 const COLORS = [
-  { fill: '#FBBF24', stroke: '#D97706', leaf: '#22C55E', label: 'ข้าวโพดเหลือง' },
-  { fill: '#34D399', stroke: '#059669', leaf: '#16A34A', label: 'ข้าวโพดหวาน' },
-  { fill: '#F87171', stroke: '#DC2626', leaf: '#22C55E', label: 'ข้าวโพดแดง' },
-  { fill: '#A78BFA', stroke: '#7C3AED', leaf: '#16A34A', label: 'ข้าวโพดม่วง' },
-  { fill: '#FB923C', stroke: '#EA580C', leaf: '#22C55E', label: 'ข้าวโพดส้ม' },
+  { fill: '#FBBF24', stroke: '#D97706', filter: 'none', label: 'ข้าวโพดเหลือง' },
+  { fill: '#34D399', stroke: '#059669', filter: 'hue-rotate(60deg) saturate(1.4)', label: 'ข้าวโพดหวาน' },
+  { fill: '#F87171', stroke: '#DC2626', filter: 'hue-rotate(-45deg) saturate(1.5)', label: 'ข้าวโพดแดง' },
+  { fill: '#A78BFA', stroke: '#7C3AED', filter: 'hue-rotate(180deg) saturate(1.2)', label: 'ข้าวโพดม่วง' },
+  { fill: '#FB923C', stroke: '#EA580C', filter: 'hue-rotate(-25deg) saturate(1.6)', label: 'ข้าวโพดส้ม' },
 ];
 
 let nextId = 0;
@@ -282,7 +282,7 @@ export default function ArrangeGame({ onComplete }: { onComplete: (correct: bool
                 }}
               >
                 {cell && (
-                  <span style={{ fontSize: '1.8rem', lineHeight: 1 }}>🌽</span>
+                  <span style={{ fontSize: '1.8rem', lineHeight: 1, filter: color.filter }}>🌽</span>
                 )}
               </button>
             );
@@ -302,7 +302,8 @@ export default function ArrangeGame({ onComplete }: { onComplete: (correct: bool
               height: 24,
               background: c.fill,
               border: '1px solid var(--color-border)',
-              fontSize: '0.8rem'
+              fontSize: '0.9rem',
+              filter: c.filter,
             }}>🌽</span>
             {c.label}
           </div>
