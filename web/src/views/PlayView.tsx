@@ -51,8 +51,7 @@ export default function PlayView() {
           ⭐ {balance} แต้ม
         </div>
         <div className="nav-row">
-          <button className="btn btn-accent" onClick={() => nav('/rewards')}>🎁 ของรางวัล</button>
-          <button className="btn btn-secondary" onClick={() => nav('/me')}>👤 โปรไฟล์</button>
+          <button className="btn btn-primary" onClick={() => nav('/me')}>👤 โปรไฟล์</button>
         </div>
       </div>
     );
