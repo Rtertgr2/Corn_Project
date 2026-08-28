@@ -1,0 +1,17 @@
+{
+  "name": "corn-project",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": ["server", "web"],
+  "scripts": {
+    "dev": "npm-run-all --parallel dev:server dev:web",
+    "dev:server": "npm --workspace server run dev",
+    "dev:web": "npm --workspace web run dev",
+    "test": "npm --workspace server run test && npm --workspace web run test",
+    "up": "docker compose up -d",
+    "down": "docker compose down"
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.5"
+  }
+}
