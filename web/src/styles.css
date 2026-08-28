@@ -63,14 +63,17 @@ html {
 
 body {
   font-family: var(--font-body);
-  background: var(--color-ink);
-  color: var(--color-lime);
+  background: 
+    radial-gradient(ellipse at 20% 50%, rgba(34, 197, 94, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(167, 139, 250, 0.06) 0%, transparent 40%),
+    radial-gradient(ellipse at 50% 80%, rgba(245, 158, 11, 0.05) 0%, transparent 40%),
+    linear-gradient(180deg, #F0FDF4 0%, #FAF5FF 50%, #FFFBEB 100%);
+  color: var(--color-ink);
   line-height: 1.6;
   min-height: 100dvh;
   -webkit-font-smoothing: antialiased;
   overscroll-behavior: contain;
-  background-image: 
-    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(170, 255, 0, 0.03) 2px, rgba(170, 255, 0, 0.03) 4px);
+  background-attachment: fixed;
 }
 
 #root {
@@ -91,7 +94,7 @@ body {
 .app-header {
   text-align: center;
   padding: var(--space-lg) 0 var(--space-md);
-  border-bottom: 2px solid var(--color-lime);
+  border-bottom: 2px solid var(--color-ink);
   margin-bottom: var(--space-md);
   position: relative;
 }
@@ -102,8 +105,8 @@ body {
   bottom: -2px;
   left: 50%;
   transform: translateX(-50%);
-  background: var(--color-ink);
-  color: var(--color-lime);
+  background: var(--color-beige-light);
+  color: var(--color-ink);
   padding: 0 8px;
   font-family: var(--font-mono);
   font-size: 0.8rem;
@@ -114,7 +117,6 @@ body {
   margin-bottom: var(--space-sm);
   animation: blink 1s step-end infinite;
   display: inline-block;
-  filter: hue-rotate(60deg) saturate(2);
 }
 
 @keyframes blink {
@@ -126,15 +128,14 @@ body {
   font-family: var(--font-heading);
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--color-lime);
+  color: var(--color-ink);
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  text-shadow: 0 0 10px var(--color-lime-glow);
 }
 
 .app-header .subtitle {
   font-size: 0.75rem;
-  color: var(--color-muted-foreground);
+  color: var(--color-muted);
   margin-top: var(--space-xs);
   font-weight: 400;
   letter-spacing: 0.05em;
@@ -145,18 +146,18 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: var(--color-surface-raised);
-  border: 2px solid var(--color-lime);
+  background: var(--color-beige);
+  border: 2px solid var(--color-ink);
   padding: var(--space-md) var(--space-lg);
   margin-bottom: var(--space-md);
-  box-shadow: var(--shadow-md), var(--shadow-lime);
+  box-shadow: var(--shadow-md);
 }
 
 .game-hud .points-display {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
-  color: var(--color-lime);
+  color: var(--color-ink);
 }
 
 .game-hud .points-icon {
@@ -174,22 +175,21 @@ body {
   font-size: 1.8rem;
   font-weight: 700;
   line-height: 1;
-  color: var(--color-lime);
-  text-shadow: 0 0 10px var(--color-lime-glow);
+  color: var(--color-ink);
 }
 
 .game-hud .points-label {
   font-size: 0.65rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--color-muted-foreground);
+  color: var(--color-muted);
 }
 
 .game-hud .streak-badge {
-  background: var(--color-surface);
-  border: 1px solid var(--color-beige);
+  background: var(--color-lime);
+  border: 1px solid var(--color-ink);
   padding: var(--space-xs) var(--space-md);
-  color: var(--color-beige);
+  color: var(--color-ink);
   font-size: 0.75rem;
   font-weight: 700;
   display: flex;
@@ -206,7 +206,7 @@ body {
   display: flex;
   justify-content: space-between;
   font-size: 0.75rem;
-  color: var(--color-muted-foreground);
+  color: var(--color-muted);
   margin-bottom: var(--space-xs);
   font-weight: 400;
   letter-spacing: 0.05em;
@@ -214,8 +214,8 @@ body {
 
 .progress-bar {
   height: 8px;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  background: var(--color-beige-light);
+  border: 1px solid var(--color-ink);
   overflow: hidden;
 }
 
@@ -223,7 +223,6 @@ body {
   height: 100%;
   background: var(--color-lime);
   transition: width 0.3s step-end;
-  box-shadow: 0 0 10px var(--color-lime-glow);
 }
 
 /* Cards */
@@ -372,19 +371,19 @@ body {
 }
 
 .btn-secondary {
-  background: var(--color-surface);
-  color: var(--color-lime);
-  border-color: var(--color-lime);
+  background: var(--color-beige);
+  color: var(--color-ink);
+  border-color: var(--color-ink);
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background: var(--color-surface-raised);
+  background: var(--color-beige-light);
 }
 
 .btn-outline {
   background: transparent;
-  color: var(--color-lime);
-  border-color: var(--color-lime);
+  color: var(--color-ink);
+  border-color: var(--color-ink);
 }
 
 .btn-outline:hover:not(:disabled) {
@@ -415,8 +414,8 @@ body {
   font-family: var(--font-body);
   font-size: 1rem;
   border: 2px solid var(--color-ink);
-  background: var(--color-surface);
-  color: var(--color-lime);
+  background: var(--color-beige-light);
+  color: var(--color-ink);
   transition: border-color var(--transition-fast);
   -webkit-appearance: none;
   letter-spacing: 0.05em;
@@ -590,7 +589,7 @@ body {
 
 /* Loading Skeleton */
 .skeleton {
-  background: var(--color-surface);
+  background: var(--color-beige-light);
   border: 1px solid var(--color-border);
   animation: skeleton-blink 1s step-end infinite;
 }
@@ -635,12 +634,12 @@ body {
 .coupon-code {
   display: inline-block;
   padding: 8px 16px;
-  background: var(--color-surface);
-  border: 2px dashed var(--color-lime);
+  background: var(--color-beige-light);
+  border: 2px dashed var(--color-ink);
   font-family: var(--font-mono);
   font-size: 1rem;
   font-weight: 700;
-  color: var(--color-lime);
+  color: var(--color-ink);
   letter-spacing: 0.1em;
 }
 
@@ -649,7 +648,7 @@ body {
   font-family: var(--font-heading);
   font-size: 1rem;
   font-weight: 700;
-  color: var(--color-lime);
+  color: var(--color-ink);
   margin: var(--space-lg) 0 var(--space-sm);
   display: flex;
   align-items: center;
@@ -686,10 +685,9 @@ body {
   font-family: var(--font-heading);
   font-size: 1.3rem;
   font-weight: 700;
-  color: var(--color-lime);
+  color: var(--color-ink);
   margin-bottom: var(--space-sm);
   letter-spacing: 0.05em;
-  text-shadow: 0 0 10px var(--color-lime-glow);
 }
 
 .result-screen .result-sub {
@@ -707,10 +705,10 @@ body {
   bottom: 0;
   pointer-events: none;
   z-index: -1;
-  opacity: 0.05;
+  opacity: 0.03;
   background-image: 
-    repeating-linear-gradient(0deg, transparent, transparent 2px, var(--color-lime) 2px, var(--color-lime) 3px),
-    repeating-linear-gradient(90deg, transparent, transparent 2px, var(--color-lime) 2px, var(--color-lime) 3px);
+    repeating-linear-gradient(0deg, transparent, transparent 2px, var(--color-ink) 2px, var(--color-ink) 3px),
+    repeating-linear-gradient(90deg, transparent, transparent 2px, var(--color-ink) 2px, var(--color-ink) 3px);
   background-size: 4px 4px;
 }
 
@@ -719,10 +717,9 @@ body {
   position: fixed;
   pointer-events: none;
   z-index: -1;
-  opacity: 0.1;
+  opacity: 0.08;
   animation: float 8s step-end infinite;
   font-size: 2rem;
-  filter: hue-rotate(60deg) saturate(2);
 }
 
 @keyframes float {
