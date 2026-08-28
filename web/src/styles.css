@@ -81,19 +81,8 @@ body {
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  background: var(--color-card);
   border-left: 1px solid var(--color-border);
   border-right: 1px solid var(--color-border);
-  box-shadow: 0 0 40px rgba(76, 29, 149, 0.06);
-}
-
-@media (min-width: 500px) {
-  .app-shell {
-    min-height: 100dvh;
-    border-radius: 0;
-    margin-top: 0;
-    margin-bottom: 0;
-  }
 }
 
 .app-header {
