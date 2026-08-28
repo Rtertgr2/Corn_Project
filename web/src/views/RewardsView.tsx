@@ -39,9 +39,11 @@ export default function RewardsView() {
 
   return (
     <div>
-      {/* Pill HUD */}
+      {/* Pill HUD — heading + แต้ม */}
       <div className="points-hud">
-        <div style={{ width: 100 }} />
+        <h2 className="section-title" style={{ margin: 0, paddingLeft: 'var(--space-md)', color: 'var(--color-on-primary)', flex: 1 }}>
+          <span className="icon">🎁</span> ของรางวัล
+        </h2>
         <div className="points-right">
           <div className="star-icon">⭐</div>
           <div>
@@ -51,7 +53,6 @@ export default function RewardsView() {
         </div>
       </div>
 
-      <h2 className="section-title"><span className="icon">🎁</span> ของรางวัล</h2>
       <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginBottom: 'var(--space-md)' }}>
         แลกแต้มสะสมเป็นของรางวัล
       </p>
@@ -94,8 +95,12 @@ export default function RewardsView() {
       )}
 
       <div className="nav-row">
-        <button className="btn btn-secondary" onClick={() => nav('/me')}>👤 โปรไฟล์</button>
-        <button className="btn btn-primary" onClick={() => nav('/play')}>🎮 เล่นเกม</button>
+        <button className="btn btn-secondary" onClick={() => nav('/me')}>
+          👤 โปรไฟล์
+        </button>
+        <button className="btn btn-primary" onClick={() => nav('/play')}>
+          🎮 เล่นเกม
+        </button>
       </div>
     </div>
   );
