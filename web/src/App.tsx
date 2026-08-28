@@ -23,7 +23,7 @@ export default function App() {
       <div className="app-shell">
         <header className="app-header">
           <div className="mascot">🌽</div>
-          <h1>ตลาดยิ่งเจริญ</h1>
+          <h1>ข้าวนัวโพด</h1>
           <p className="subtitle">เล่นเกมส์ สะสมแต้ม แลกของรางวัล</p>
         </header>
         <Routes>

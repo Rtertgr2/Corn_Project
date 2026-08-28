@@ -39,15 +39,16 @@ export default function RewardsView() {
 
   return (
     <div>
+      {/* Pill HUD */}
       <div className="points-hud">
-        <div className="points-left">
-          <div className="points-icon">⭐</div>
-          <div className="points-info">
+        <div style={{ width: 100 }} />
+        <div className="points-right">
+          <div className="star-icon">⭐</div>
+          <div>
             <div className="points-value">{data.balance}</div>
             <div className="points-label">แต้ม</div>
           </div>
         </div>
-        <div className="streak">🔥 1 วัน</div>
       </div>
 
       <h2 className="section-title"><span className="icon">🎁</span> ของรางวัล</h2>
@@ -93,12 +94,8 @@ export default function RewardsView() {
       )}
 
       <div className="nav-row">
-        <button className="btn btn-secondary" onClick={() => nav('/me')}>
-          👤 โปรไฟล์
-        </button>
-        <button className="btn btn-primary" onClick={() => nav('/play')}>
-          🎮 เล่นเกม
-        </button>
+        <button className="btn btn-secondary" onClick={() => nav('/me')}>👤 โปรไฟล์</button>
+        <button className="btn btn-primary" onClick={() => nav('/play')}>🎮 เล่นเกม</button>
       </div>
     </div>
   );

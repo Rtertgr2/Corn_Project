@@ -125,45 +125,55 @@ body {
   margin-top: var(--space-xs); font-weight: 600;
 }
 
-/* ─── Points HUD ─── */
+/* ─── Points HUD (pill shape) ─── */
 .points-hud {
   display: flex; align-items: center; justify-content: space-between;
   background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
-  border-radius: var(--radius-xl);
-  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-full);
+  padding: var(--space-sm);
   margin-bottom: var(--space-lg);
   box-shadow: var(--shadow-lg);
 }
 
-.points-hud .points-left {
+.points-hud .btn-back-game {
+  background: var(--color-surface);
+  color: var(--color-text);
+  border-radius: var(--radius-full);
+  padding: var(--space-sm) var(--space-md);
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.points-hud .btn-back-game:hover {
+  background: #F3F0FF;
+}
+
+.points-hud .btn-back-game:active {
+  transform: scale(0.97);
+}
+
+.points-hud .points-right {
   display: flex; align-items: center; gap: var(--space-md);
+  padding-right: var(--space-md);
 }
 
-.points-hud .points-icon {
-  width: 48px; height: 48px;
-  background: rgba(255,255,255,0.2);
-  border-radius: var(--radius-md);
+.points-hud .star-icon {
+  width: 40px; height: 40px;
+  background: rgba(124, 58, 237, 0.4);
+  border-radius: var(--radius-sm);
   display: flex; align-items: center; justify-content: center;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
 }
 
-.points-hud .points-info .points-value {
-  font-size: 1.8rem; font-weight: 800;
+.points-hud .points-value {
+  font-size: 1.6rem; font-weight: 800;
   color: var(--color-on-primary); line-height: 1;
 }
 
-.points-hud .points-info .points-label {
-  font-size: 0.7rem; color: rgba(255,255,255,0.8);
-  text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600;
-}
-
-.points-hud .streak {
-  background: rgba(255,255,255,0.15);
-  border-radius: var(--radius-full);
-  padding: var(--space-sm) var(--space-md);
-  color: var(--color-on-primary);
-  font-size: 0.8rem; font-weight: 700;
-  display: flex; align-items: center; gap: var(--space-xs);
+.points-hud .points-label {
+  font-size: 0.7rem; color: rgba(255,255,255,0.8); font-weight: 600;
 }
 
 /* ─── Cards with accent bar ─── */

@@ -40,12 +40,8 @@ export default function GameSelectView() {
           ⭐ {balance} แต้ม
         </div>
         <div className="nav-row">
-          <button className="btn btn-accent" onClick={() => nav('/rewards')}>
-            🎁 ของรางวัล
-          </button>
-          <button className="btn btn-secondary" onClick={() => nav('/me')}>
-            👤 โปรไฟล์
-          </button>
+          <button className="btn btn-accent" onClick={() => nav('/rewards')}>🎁 ของรางวัล</button>
+          <button className="btn btn-secondary" onClick={() => nav('/me')}>👤 โปรไฟล์</button>
         </div>
       </div>
     );
@@ -55,16 +51,16 @@ export default function GameSelectView() {
 
   return (
     <div>
-      {/* Points HUD */}
+      {/* Pill HUD */}
       <div className="points-hud">
-        <div className="points-left">
-          <div className="points-icon">⭐</div>
-          <div className="points-info">
+        <div style={{ width: 100 }} />
+        <div className="points-right">
+          <div className="star-icon">⭐</div>
+          <div>
             <div className="points-value">{balance}</div>
             <div className="points-label">แต้ม</div>
           </div>
         </div>
-        <div className="streak">🔥 1 วัน</div>
       </div>
 
       <h2 className="section-title"><span className="icon">🎮</span> เลือกเกมที่อยากเล่น</h2>
@@ -73,11 +69,7 @@ export default function GameSelectView() {
       </p>
 
       {games.map(([id, { name, desc }]) => (
-        <div
-          key={id}
-          className="game-option-card"
-          onClick={() => nav(`/play/${id}`)}
-        >
+        <div key={id} className="game-option-card" onClick={() => nav(`/play/${id}`)}>
           <div className={`game-icon ${id}`}>
             {id === 'quiz' ? '❓' : '🧩'}
           </div>
@@ -90,12 +82,8 @@ export default function GameSelectView() {
       ))}
 
       <div className="nav-row">
-        <button className="btn btn-secondary" onClick={() => nav('/me')}>
-          👤 โปรไฟล์
-        </button>
-        <button className="btn btn-ghost" onClick={() => nav('/rewards')}>
-          🎁 ของรางวัล
-        </button>
+        <button className="btn btn-secondary" onClick={() => nav('/me')}>👤 โปรไฟล์</button>
+        <button className="btn btn-ghost" onClick={() => nav('/rewards')}>🎁 ของรางวัล</button>
       </div>
     </div>
   );
