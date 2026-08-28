@@ -55,31 +55,28 @@ export default function GameSelectView() {
 
   return (
     <div>
-      {/* Game HUD */}
-      <div className="game-hud">
-        <div className="points-display">
-          <span className="points-icon">⭐</span>
-          <div>
+      {/* Points HUD */}
+      <div className="points-hud">
+        <div className="points-left">
+          <div className="points-icon">⭐</div>
+          <div className="points-info">
             <div className="points-value">{balance}</div>
             <div className="points-label">แต้ม</div>
           </div>
         </div>
-        <div className="streak-badge">
-          <span className="streak-flame">🔥</span>
-          1 วัน
-        </div>
+        <div className="streak">🔥 1 วัน</div>
       </div>
 
-      {/* Section Title */}
-      <h2 className="section-title">🎮 เลือกเกมที่อยากเล่น</h2>
-      <p style={{ fontSize: '0.85rem', color: 'var(--color-muted-foreground)', marginBottom: 'var(--space-md)' }}>
+      {/* Section */}
+      <h2 className="section-title"><span className="icon">🎮</span> เลือกเกมที่อยากเล่น</h2>
+      <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginBottom: 'var(--space-md)' }}>
         เล่นได้วันละ 1 เกม ได้ 1 แต้มต่อเกม
       </p>
 
       {games.map(([id, { name, desc }]) => (
         <div
           key={id}
-          className="game-card"
+          className="game-option-card"
           onClick={() => nav(`/play/${id}`)}
         >
           <div className={`game-icon ${id}`}>
@@ -93,11 +90,11 @@ export default function GameSelectView() {
         </div>
       ))}
 
-      <div className="nav-row" style={{ marginTop: 'var(--space-sm)' }}>
+      <div className="nav-row">
         <button className="btn btn-secondary" onClick={() => nav('/me')}>
           👤 โปรไฟล์
         </button>
-        <button className="btn btn-outline" onClick={() => nav('/rewards')}>
+        <button className="btn btn-ghost" onClick={() => nav('/rewards')}>
           🎁 ของรางวัล
         </button>
       </div>

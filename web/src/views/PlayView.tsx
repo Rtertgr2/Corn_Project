@@ -79,13 +79,13 @@ export default function PlayView() {
   return (
     <div>
       {/* Game HUD */}
-      <div className="game-hud">
-        <button className="btn btn-sm btn-secondary" onClick={() => nav('/play')} style={{ padding: '6px 12px', minHeight: 36 }}>
+      <div className="points-hud">
+        <button className="btn btn-sm btn-ghost" onClick={() => nav('/play')}>
           ← เปลี่ยนเกม
         </button>
-        <div className="points-display">
-          <span className="points-icon">⭐</span>
-          <div>
+        <div className="points-left">
+          <div className="points-icon">⭐</div>
+          <div className="points-info">
             <div className="points-value">{balance}</div>
             <div className="points-label">แต้ม</div>
           </div>

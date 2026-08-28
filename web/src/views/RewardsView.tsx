@@ -46,23 +46,20 @@ export default function RewardsView() {
 
   return (
     <div>
-      {/* Game HUD */}
-      <div className="game-hud">
-        <div className="points-display">
-          <span className="points-icon">⭐</span>
-          <div>
+      {/* Points HUD */}
+      <div className="points-hud">
+        <div className="points-left">
+          <div className="points-icon">⭐</div>
+          <div className="points-info">
             <div className="points-value">{data.balance}</div>
             <div className="points-label">แต้ม</div>
           </div>
         </div>
-        <div className="streak-badge">
-          <span className="streak-flame">🔥</span>
-          1 วัน
-        </div>
+        <div className="streak">🔥 1 วัน</div>
       </div>
 
-      <h2 className="section-title">🎁 ของรางวัล</h2>
-      <p style={{ fontSize: '0.85rem', color: 'var(--color-muted-foreground)', marginBottom: 'var(--space-md)' }}>
+      <h2 className="section-title"><span className="icon">🎁</span> ของรางวัล</h2>
+      <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginBottom: 'var(--space-md)' }}>
         แลกแต้มสะสมเป็นของรางวัล
       </p>
 
@@ -93,7 +90,7 @@ export default function RewardsView() {
             <div className="msg-success">
               <p style={{ marginBottom: 'var(--space-sm)' }}>✅ แลกสำเร็จ!</p>
               <p className="coupon-code">{msg}</p>
-              <p style={{ fontSize: '0.8rem', color: 'var(--color-muted-foreground)', marginTop: 'var(--space-sm)' }}>
+              <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginTop: 'var(--space-sm)' }}>
                 แสดงโค้ดนี้ให้ร้านค้าเพื่อรับรางวัล
               </p>
             </div>
