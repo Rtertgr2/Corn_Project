@@ -46,45 +46,44 @@ export default function RewardsView() {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-md)' }}>
-        <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.1rem', fontWeight: 600 }}>ของรางวัล</h2>
-        <span className="points-badge">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          {data.balance} แต้ม
-        </span>
+      {/* Game HUD */}
+      <div className="game-hud">
+        <div className="points-display">
+          <span className="points-icon">⭐</span>
+          <div>
+            <div className="points-value">{data.balance}</div>
+            <div className="points-label">แต้ม</div>
+          </div>
+        </div>
+        <div className="streak-badge">
+          <span className="streak-flame">🔥</span>
+          1 วัน
+        </div>
       </div>
+
+      <h2 className="section-title">🎁 ของรางวัล</h2>
+      <p style={{ fontSize: '0.85rem', color: 'var(--color-muted-foreground)', marginBottom: 'var(--space-md)' }}>
+        แลกแต้มสะสมเป็นของรางวัล
+      </p>
 
       {data.rewards.map((r) => (
         <div key={r.id} className="reward-card">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <div style={{ flex: 1 }}>
-              <p className="reward-name">{r.name}</p>
-              <p className="reward-desc">{r.description}</p>
-            </div>
-            <span className="reward-cost">{r.cost_points} แต้ม</span>
+          <div className="reward-icon">🎁</div>
+          <div className="reward-info">
+            <p className="reward-name">{r.name}</p>
+            <p className="reward-desc">{r.description}</p>
           </div>
-          <button
-            className={`btn ${r.canAfford ? 'btn-accent' : 'btn-secondary'} btn-sm`}
-            disabled={!r.canAfford || redeeming === r.id}
-            onClick={() => redeem(r.id)}
-            style={{ marginTop: 'var(--space-sm)', width: '100%' }}
-          >
-            {redeeming === r.id ? (
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ animation: 'spin 1s linear infinite' }}>
-                  <path d="M21 12a9 9 0 11-6.219-8.56"/>
-                </svg>
-                กำลังแลก...
-              </span>
-            ) : r.canAfford ? (
-              <>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>
-                แลกเลย
-              </>
-            ) : (
-              'แต้มไม่พอ'
-            )}
-          </button>
+          <div style={{ textAlign: 'right' }}>
+            <span className="reward-cost">⭐ {r.cost_points}</span>
+            <button
+              className={`btn ${r.canAfford ? 'btn-accent' : 'btn-secondary'} btn-sm`}
+              disabled={!r.canAfford || redeeming === r.id}
+              onClick={() => redeem(r.id)}
+              style={{ marginTop: 'var(--space-xs)', minWidth: 80 }}
+            >
+              {redeeming === r.id ? '...' : r.canAfford ? 'แลก' : 'ไม่พอ'}
+            </button>
+          </div>
         </div>
       ))}
 
@@ -92,7 +91,7 @@ export default function RewardsView() {
         <div style={{ marginTop: 'var(--space-md)' }}>
           {isSuccess ? (
             <div className="msg-success">
-              <p style={{ marginBottom: 'var(--space-sm)' }}>แลกสำเร็จ!</p>
+              <p style={{ marginBottom: 'var(--space-sm)' }}>✅ แลกสำเร็จ!</p>
               <p className="coupon-code">{msg}</p>
               <p style={{ fontSize: '0.8rem', color: 'var(--color-muted-foreground)', marginTop: 'var(--space-sm)' }}>
                 แสดงโค้ดนี้ให้ร้านค้าเพื่อรับรางวัล
@@ -104,16 +103,12 @@ export default function RewardsView() {
         </div>
       )}
 
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-
       <div className="nav-row">
         <button className="btn btn-secondary" onClick={() => nav('/me')}>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          โปรไฟล์
+          👤 โปรไฟล์
         </button>
         <button className="btn btn-primary" onClick={() => nav('/play')}>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-          เล่นเกม
+          🎮 เล่นเกม
         </button>
       </div>
     </div>

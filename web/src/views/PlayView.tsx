@@ -51,18 +51,15 @@ export default function PlayView() {
   if (played) {
     return (
       <div className="card result-screen">
-        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
-          <polyline points="22 4 12 14.01 9 11.01"/>
-        </svg>
-        <p className="result-text">วันนี้เล่นแล้วครับ!</p>
+        <div className="result-icon">✅</div>
+        <p className="result-text">วันนี้เล่นแล้วครบ!</p>
+        <p className="result-sub">กลับมาเล่นใหม่พรุ่งนี้นะ</p>
         <div className="points-badge" style={{ margin: '0 auto var(--space-md)' }}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          {balance} แต้ม
+          ⭐ {balance} แต้ม
         </div>
         <div className="nav-row">
-          <button className="btn btn-accent" onClick={() => nav('/rewards')}>ของรางวัล</button>
-          <button className="btn btn-secondary" onClick={() => nav('/me')}>โปรไฟล์</button>
+          <button className="btn btn-accent" onClick={() => nav('/rewards')}>🎁 ของรางวัล</button>
+          <button className="btn btn-secondary" onClick={() => nav('/me')}>👤 โปรไฟล์</button>
         </div>
       </div>
     );
@@ -81,15 +78,18 @@ export default function PlayView() {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-md)' }}>
+      {/* Game HUD */}
+      <div className="game-hud">
         <button className="btn btn-sm btn-secondary" onClick={() => nav('/play')} style={{ padding: '6px 12px', minHeight: 36 }}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-          เปลี่ยนเกม
+          ← เปลี่ยนเกม
         </button>
-        <span className="points-badge">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          {balance} แต้ม
-        </span>
+        <div className="points-display">
+          <span className="points-icon">⭐</span>
+          <div>
+            <div className="points-value">{balance}</div>
+            <div className="points-label">แต้ม</div>
+          </div>
+        </div>
       </div>
 
       <div className="card">
