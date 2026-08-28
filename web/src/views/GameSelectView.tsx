@@ -51,11 +51,14 @@ export default function GameSelectView() {
 
   return (
     <div>
-      {/* Pill HUD — heading อยู่ข้างในแถบม่วงซ้ายสุด */}
+      {/* Pill HUD — heading + ของรางวัล + แต้ม อยู่ในแถบเดียวกัน */}
       <div className="points-hud">
-        <h2 className="section-title" style={{ margin: 0, paddingLeft: 'var(--space-md)', color: 'var(--color-on-primary)' }}>
+        <h2 className="section-title" style={{ margin: 0, paddingLeft: 'var(--space-md)', color: 'var(--color-on-primary)', flex: 1 }}>
           <span className="icon">🎮</span> เลือกเกมที่อยากเล่น
         </h2>
+        <button className="btn-rewards" onClick={() => nav('/rewards')}>
+          🎁 ของรางวัล
+        </button>
         <div className="points-right">
           <div className="star-icon">⭐</div>
           <div>
@@ -84,7 +87,6 @@ export default function GameSelectView() {
 
       <div className="nav-row">
         <button className="btn btn-secondary" onClick={() => nav('/me')}>👤 โปรไฟล์</button>
-        <button className="btn btn-ghost" onClick={() => nav('/rewards')}>🎁 ของรางวัล</button>
       </div>
     </div>
   );
