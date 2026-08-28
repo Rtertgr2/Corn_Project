@@ -63,12 +63,17 @@ html {
 
 body {
   font-family: var(--font-body);
-  background: var(--color-background);
+  background: 
+    radial-gradient(ellipse at 20% 50%, rgba(34, 197, 94, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(167, 139, 250, 0.06) 0%, transparent 40%),
+    radial-gradient(ellipse at 50% 80%, rgba(245, 158, 11, 0.05) 0%, transparent 40%),
+    linear-gradient(180deg, #F0FDF4 0%, #FAF5FF 50%, #FFFBEB 100%);
   color: var(--color-foreground);
   line-height: 1.5;
   min-height: 100dvh;
   -webkit-font-smoothing: antialiased;
   overscroll-behavior: contain;
+  background-attachment: fixed;
 }
 
 #root {
@@ -688,7 +693,7 @@ body {
   margin-bottom: var(--space-lg);
 }
 
-/* Decorative Corn Pattern */
+/* Decorative Nature Pattern */
 .corn-pattern {
   position: fixed;
   top: 0;
@@ -697,25 +702,26 @@ body {
   bottom: 0;
   pointer-events: none;
   z-index: -1;
-  opacity: 0.03;
+  opacity: 0.04;
   background-image: 
-    radial-gradient(circle at 20% 80%, var(--color-primary) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, var(--color-secondary) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, var(--color-accent) 0%, transparent 30%);
+    radial-gradient(circle at 15% 85%, #22C55E 0%, transparent 30%),
+    radial-gradient(circle at 85% 15%, #A78BFA 0%, transparent 25%),
+    radial-gradient(circle at 50% 50%, #F59E0B 0%, transparent 20%);
 }
 
-/* Floating Corn Animation */
+/* Floating Nature Elements */
 .floating-corn {
   position: fixed;
   pointer-events: none;
   z-index: -1;
-  opacity: 0.1;
-  animation: float 6s ease-in-out infinite;
+  opacity: 0.08;
+  animation: float 8s ease-in-out infinite;
+  font-size: 3rem;
 }
 
 @keyframes float {
   0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-20px) rotate(10deg); }
+  50% { transform: translateY(-15px) rotate(5deg); }
 }
 
 /* Streak Flame */
