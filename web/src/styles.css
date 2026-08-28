@@ -1,28 +1,29 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-  /* Cypherpunk Design Tokens */
-  --color-lime: #AAFF00;
-  --color-lime-dark: #88CC00;
-  --color-lime-glow: rgba(170, 255, 0, 0.3);
-  --color-ink: #0A0A0A;
-  --color-ink-soft: #1A1A1A;
-  --color-beige: #D4C5A9;
-  --color-beige-light: #E8DCC8;
-  --color-beige-dark: #B8A88A;
-  --color-surface: #111111;
-  --color-surface-raised: #1A1A1A;
-  --color-border: #333333;
-  --color-muted: #666666;
-  --color-muted-foreground: #999999;
-  --color-destructive: #FF3333;
+  /* Warm Natural Design Tokens */
+  --color-ink: #2D2A26;
+  --color-ink-soft: #4A453F;
+  --color-cream: #F5F0E8;
+  --color-cream-light: #FBF8F3;
+  --color-cream-dark: #E8E0D0;
+  --color-cream-darker: #D4CABB;
+  --color-border: #C9BFB0;
+  --color-muted: #7A7266;
+  --color-muted-foreground: #9B9285;
+  --color-destructive: #C62828;
   --color-on-destructive: #FFFFFF;
-  --color-gold: #FFD700;
+  --color-green: #4CAF50;
+  --color-green-dark: #388E3C;
+  --color-green-light: #A5D6A7;
+  --color-gold: #C9A227;
+  --color-gold-light: #E8D5A0;
+  --color-purple: #7C4DFF;
 
-  /* Typography — Monospace for retro-tech */
-  --font-heading: 'Space Grotesk', monospace;
-  --font-body: 'Space Mono', monospace;
-  --font-mono: 'Space Mono', monospace;
+  /* Typography — ฟอนต์ไทยอ่านง่าย */
+  --font-heading: 'Noto Sans Thai', system-ui, sans-serif;
+  --font-body: 'Noto Sans Thai', system-ui, sans-serif;
+  --font-mono: 'Noto Sans Thai', system-ui, sans-serif;
 
   /* Spacing */
   --space-xs: 4px;
@@ -32,17 +33,16 @@
   --space-xl: 32px;
   --space-2xl: 48px;
 
-  /* Radius — Pixel-edged (sharp corners) */
-  --radius-sm: 0px;
-  --radius-md: 0px;
-  --radius-lg: 0px;
-  --radius-full: 0px;
+  /* Radius — นุ่มนวล */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
 
-  /* Shadows — Raised beige effect */
-  --shadow-sm: 2px 2px 0px var(--color-beige-dark);
-  --shadow-md: 4px 4px 0px var(--color-beige-dark);
-  --shadow-lg: 6px 6px 0px var(--color-beige-dark);
-  --shadow-lime: 0 0 20px var(--color-lime-glow);
+  /* Shadows — นุ่มนวล */
+  --shadow-sm: 0 1px 3px rgba(45, 42, 38, 0.08);
+  --shadow-md: 0 4px 12px rgba(45, 42, 38, 0.1);
+  --shadow-lg: 0 8px 24px rgba(45, 42, 38, 0.12);
 
   /* Transitions */
   --transition-fast: 100ms step-end;
@@ -64,10 +64,10 @@ html {
 body {
   font-family: var(--font-body);
   background: 
-    radial-gradient(ellipse at 20% 50%, rgba(34, 197, 94, 0.08) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 20%, rgba(167, 139, 250, 0.06) 0%, transparent 40%),
-    radial-gradient(ellipse at 50% 80%, rgba(245, 158, 11, 0.05) 0%, transparent 40%),
-    linear-gradient(180deg, #F0FDF4 0%, #FAF5FF 50%, #FFFBEB 100%);
+    radial-gradient(ellipse at 20% 50%, rgba(76, 175, 80, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(124, 77, 255, 0.04) 0%, transparent 40%),
+    radial-gradient(ellipse at 50% 80%, rgba(201, 162, 39, 0.04) 0%, transparent 40%),
+    linear-gradient(180deg, #F9FBF7 0%, #FAF7F2 50%, #FBF8F0 100%);
   color: var(--color-ink);
   line-height: 1.6;
   min-height: 100dvh;
@@ -94,22 +94,21 @@ body {
 .app-header {
   text-align: center;
   padding: var(--space-lg) 0 var(--space-md);
-  border-bottom: 2px solid var(--color-ink);
+  border-bottom: 2px solid var(--color-border);
   margin-bottom: var(--space-md);
   position: relative;
 }
 
 .app-header::after {
-  content: '>';
+  content: '▼';
   position: absolute;
-  bottom: -2px;
+  bottom: -10px;
   left: 50%;
   transform: translateX(-50%);
-  background: var(--color-beige-light);
-  color: var(--color-ink);
+  background: var(--color-cream-light);
+  color: var(--color-muted);
   padding: 0 8px;
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 0.7rem;
 }
 
 .app-header .mascot {
@@ -127,18 +126,18 @@ body {
 .app-header h1 {
   font-family: var(--font-heading);
   font-size: 1.5rem;
-  font-weight: 700;
+  font-weight: 800;
   color: var(--color-ink);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  text-transform: none;
 }
 
 .app-header .subtitle {
-  font-size: 0.75rem;
-  color: var(--color-muted);
+  font-size: 0.85rem;
+  color: var(--color-muted-foreground);
   margin-top: var(--space-xs);
   font-weight: 400;
-  letter-spacing: 0.05em;
+  letter-spacing: normal;
 }
 
 /* Game HUD */
@@ -146,7 +145,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: var(--color-beige);
+  background: var(--color-cream);
   border: 2px solid var(--color-ink);
   padding: var(--space-md) var(--space-lg);
   margin-bottom: var(--space-md);
@@ -186,7 +185,7 @@ body {
 }
 
 .game-hud .streak-badge {
-  background: var(--color-lime);
+  background: var(--color-green);
   border: 1px solid var(--color-ink);
   padding: var(--space-xs) var(--space-md);
   color: var(--color-ink);
@@ -214,20 +213,20 @@ body {
 
 .progress-bar {
   height: 8px;
-  background: var(--color-beige-light);
+  background: var(--color-cream-light);
   border: 1px solid var(--color-ink);
   overflow: hidden;
 }
 
 .progress-bar .progress-fill {
   height: 100%;
-  background: var(--color-lime);
+  background: var(--color-green);
   transition: width 0.3s step-end;
 }
 
 /* Cards */
 .card {
-  background: var(--color-beige);
+  background: var(--color-cream);
   color: var(--color-ink);
   border: 2px solid var(--color-ink);
   padding: var(--space-lg);
@@ -244,7 +243,7 @@ body {
   left: 0;
   right: 0;
   height: 3px;
-  background: var(--color-lime);
+  background: var(--color-green);
 }
 
 .card:hover {
@@ -253,7 +252,7 @@ body {
 
 /* Game Card */
 .game-card {
-  background: var(--color-beige-light);
+  background: var(--color-cream-light);
   color: var(--color-ink);
   border: 2px solid var(--color-ink);
   padding: var(--space-lg);
@@ -285,7 +284,7 @@ body {
   font-size: 1.8rem;
   flex-shrink: 0;
   border: 2px solid var(--color-ink);
-  background: var(--color-lime);
+  background: var(--color-green);
 }
 
 .game-card .game-info {
@@ -346,38 +345,38 @@ body {
 }
 
 .btn:focus-visible {
-  outline: 2px solid var(--color-lime);
+  outline: 2px solid var(--color-green);
   outline-offset: 2px;
 }
 
 .btn-primary {
-  background: var(--color-lime);
+  background: var(--color-green);
   color: var(--color-ink);
   box-shadow: var(--shadow-md);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: var(--color-lime-dark);
+  background: var(--color-green-dark);
 }
 
 .btn-accent {
-  background: var(--color-beige);
+  background: var(--color-cream);
   color: var(--color-ink);
   box-shadow: var(--shadow-md);
 }
 
 .btn-accent:hover:not(:disabled) {
-  background: var(--color-beige-light);
+  background: var(--color-cream-light);
 }
 
 .btn-secondary {
-  background: var(--color-beige);
+  background: var(--color-cream);
   color: var(--color-ink);
   border-color: var(--color-ink);
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background: var(--color-beige-light);
+  background: var(--color-cream-light);
 }
 
 .btn-outline {
@@ -387,7 +386,7 @@ body {
 }
 
 .btn-outline:hover:not(:disabled) {
-  background: var(--color-lime);
+  background: var(--color-green);
   color: var(--color-ink);
 }
 
@@ -414,7 +413,7 @@ body {
   font-family: var(--font-body);
   font-size: 1rem;
   border: 2px solid var(--color-ink);
-  background: var(--color-beige-light);
+  background: var(--color-cream-light);
   color: var(--color-ink);
   transition: border-color var(--transition-fast);
   -webkit-appearance: none;
@@ -423,8 +422,8 @@ body {
 
 .input:focus {
   outline: none;
-  border-color: var(--color-lime);
-  box-shadow: 0 0 10px var(--color-lime-glow);
+  border-color: var(--color-green);
+  box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
 }
 
 .input::placeholder {
@@ -444,7 +443,7 @@ body {
   font-size: 0.9rem;
   font-weight: 400;
   border: 2px solid var(--color-ink);
-  background: var(--color-beige-light);
+  background: var(--color-cream-light);
   color: var(--color-ink);
   cursor: pointer;
   transition: all var(--transition-fast);
@@ -453,7 +452,7 @@ body {
 }
 
 .game-option:hover:not(:disabled) {
-  background: var(--color-lime);
+  background: var(--color-green);
   box-shadow: var(--shadow-sm);
 }
 
@@ -468,13 +467,13 @@ body {
 }
 
 .game-option.selected {
-  background: var(--color-lime);
-  border-color: var(--color-lime-dark);
+  background: var(--color-green);
+  border-color: var(--color-green-dark);
 }
 
 .game-option.correct {
-  background: var(--color-lime);
-  border-color: var(--color-lime-dark);
+  background: var(--color-green);
+  border-color: var(--color-green-dark);
 }
 
 .game-option.wrong {
@@ -484,7 +483,7 @@ body {
 
 /* Reward Card */
 .reward-card {
-  background: var(--color-beige);
+  background: var(--color-cream);
   color: var(--color-ink);
   border: 2px solid var(--color-ink);
   padding: var(--space-lg);
@@ -503,7 +502,7 @@ body {
 .reward-card .reward-icon {
   width: 48px;
   height: 48px;
-  background: var(--color-lime);
+  background: var(--color-green);
   border: 2px solid var(--color-ink);
   display: flex;
   align-items: center;
@@ -546,7 +545,7 @@ body {
   align-items: center;
   gap: var(--space-xs);
   padding: 6px 14px;
-  background: var(--color-lime);
+  background: var(--color-green);
   color: var(--color-ink);
   font-family: var(--font-heading);
   font-weight: 700;
@@ -559,7 +558,7 @@ body {
 /* Status Messages */
 .msg-success {
   padding: 12px 16px;
-  background: var(--color-lime);
+  background: var(--color-green);
   border: 2px solid var(--color-ink);
   color: var(--color-ink);
   font-weight: 700;
@@ -579,7 +578,7 @@ body {
 
 .msg-info {
   padding: 12px 16px;
-  background: var(--color-beige);
+  background: var(--color-cream);
   border: 2px solid var(--color-ink);
   color: var(--color-ink);
   font-weight: 700;
@@ -589,7 +588,7 @@ body {
 
 /* Loading Skeleton */
 .skeleton {
-  background: var(--color-beige-light);
+  background: var(--color-cream-light);
   border: 1px solid var(--color-border);
   animation: skeleton-blink 1s step-end infinite;
 }
@@ -634,7 +633,7 @@ body {
 .coupon-code {
   display: inline-block;
   padding: 8px 16px;
-  background: var(--color-beige-light);
+  background: var(--color-cream-light);
   border: 2px dashed var(--color-ink);
   font-family: var(--font-mono);
   font-size: 1rem;
@@ -747,7 +746,7 @@ body {
   justify-content: center;
   width: 32px;
   height: 32px;
-  background: var(--color-lime);
+  background: var(--color-green);
   color: var(--color-ink);
   font-family: var(--font-heading);
   font-weight: 700;
@@ -765,7 +764,7 @@ body {
 }
 
 .quick-stat {
-  background: var(--color-beige);
+  background: var(--color-cream);
   color: var(--color-ink);
   border: 2px solid var(--color-ink);
   padding: var(--space-sm);
