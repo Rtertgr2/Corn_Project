@@ -2,12 +2,11 @@
   "name": "corn-project",
   "private": true,
   "version": "1.0.0",
-  "workspaces": ["server", "web"],
   "scripts": {
     "dev": "npm-run-all --parallel dev:server dev:web",
-    "dev:server": "npm --workspace server run dev",
-    "dev:web": "npm --workspace web run dev",
-    "test": "npm --workspace server run test && npm --workspace web run test",
+    "dev:server": "cd server && npm run dev",
+    "dev:web": "cd web && npm run dev",
+    "test": "cd server && npm test && cd ../web && npm test",
     "up": "docker compose up -d",
     "down": "docker compose down"
   },
