@@ -51,6 +51,12 @@ export default function GameSelectView() {
 
   return (
     <div>
+      {/* Section Title — เหนือ HUD */}
+      <h2 className="section-title"><span className="icon">🎮</span> เลือกเกมที่อยากเล่น</h2>
+      <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginBottom: 'var(--space-md)' }}>
+        เล่นได้วันละ 1 เกม ได้ 1 แต้มต่อเกม
+      </p>
+
       {/* Pill HUD */}
       <div className="points-hud">
         <div style={{ width: 100 }} />
@@ -62,11 +68,6 @@ export default function GameSelectView() {
           </div>
         </div>
       </div>
-
-      <h2 className="section-title"><span className="icon">🎮</span> เลือกเกมที่อยากเล่น</h2>
-      <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginBottom: 'var(--space-md)' }}>
-        เล่นได้วันละ 1 เกม ได้ 1 แต้มต่อเกม
-      </p>
 
       {games.map(([id, { name, desc }]) => (
         <div key={id} className="game-option-card" onClick={() => nav(`/play/${id}`)}>
