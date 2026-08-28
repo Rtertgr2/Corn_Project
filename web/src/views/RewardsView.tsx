@@ -16,7 +16,7 @@ export default function RewardsView() {
   const [redeeming, setRedeeming] = useState<number | null>(null);
 
   const load = () => api.rewards(phone).then(setData).catch((e) => setMsg(e.message));
-  useEffect(load, [phone]);
+  useEffect(() => { load(); }, [phone]);
 
   const redeem = async (reward_id: number) => {
     setMsg('');
