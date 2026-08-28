@@ -15,11 +15,11 @@ const SCORE_TARGET = 150;
 
 // สีข้าวโพดแต่ละชนิด
 const COLORS = [
-  { bg: '#FBBF24', border: '#D97706', label: 'ข้าวโพดเหลือง' },
-  { bg: '#34D399', border: '#059669', label: 'ข้าวโพดหวาน' },
-  { bg: '#F87171', border: '#DC2626', label: 'ข้าวโพดแดง' },
-  { bg: '#A78BFA', border: '#7C3AED', label: 'ข้าวโพดม่วง' },
-  { bg: '#FB923C', border: '#EA580C', label: 'ข้าวโพดส้ม' },
+  { fill: '#FBBF24', stroke: '#D97706', leaf: '#22C55E', label: 'ข้าวโพดเหลือง' },
+  { fill: '#34D399', stroke: '#059669', leaf: '#16A34A', label: 'ข้าวโพดหวาน' },
+  { fill: '#F87171', stroke: '#DC2626', leaf: '#22C55E', label: 'ข้าวโพดแดง' },
+  { fill: '#A78BFA', stroke: '#7C3AED', leaf: '#16A34A', label: 'ข้าวโพดม่วง' },
+  { fill: '#FB923C', stroke: '#EA580C', leaf: '#22C55E', label: 'ข้าวโพดส้ม' },
 ];
 
 let nextId = 0;
@@ -266,9 +266,9 @@ export default function ArrangeGame({ onComplete }: { onComplete: (correct: bool
                 disabled={animating || gameOver}
                 style={{
                   aspectRatio: '1',
-                  border: isSelected ? '3px solid var(--color-primary)' : '2px solid transparent',
+                  border: isSelected ? '3px solid var(--color-primary)' : '2px solid var(--color-border)',
                   borderRadius: 'var(--radius-sm)',
-                  background: cell ? color.bg : 'var(--color-card)',
+                  background: 'var(--color-card)',
                   cursor: animating ? 'default' : 'pointer',
                   transition: 'all 0.15s ease',
                   transform: isSelected ? 'scale(1.1)' : isMatched ? 'scale(0.8)' : 'scale(1)',
@@ -278,31 +278,31 @@ export default function ArrangeGame({ onComplete }: { onComplete: (correct: bool
                   justifyContent: 'center',
                   padding: 0,
                   minHeight: 44,
-                  boxShadow: isSelected ? '0 0 0 2px rgba(124, 58, 237, 0.3)' : 'none',
+                  boxShadow: isSelected ? '0 0 0 2px rgba(124, 58, 237, 0.3)' : 'var(--shadow-sm)',
                 }}
               >
                 {cell && (
-                  <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
                     {/* ใบข้าวโพดซ้าย */}
-                    <path d="M10 8 Q6 4 8 1 Q10 4 12 7" fill="#4ADE80" stroke="#16A34A" strokeWidth="0.8"/>
+                    <path d="M10 8 Q6 4 8 1 Q10 4 12 7" fill={color.leaf} stroke={color.leaf} strokeWidth="0.5"/>
                     {/* ใบข้าวโพดขวา */}
-                    <path d="M22 8 Q26 4 24 1 Q22 4 20 7" fill="#4ADE80" stroke="#16A34A" strokeWidth="0.8"/>
+                    <path d="M22 8 Q26 4 24 1 Q22 4 20 7" fill={color.leaf} stroke={color.leaf} strokeWidth="0.5"/>
                     {/* ฝักข้าวโพด */}
-                    <ellipse cx="16" cy="18" rx="7" ry="10" fill={color.bg} stroke={color.border} strokeWidth="1.2"/>
+                    <ellipse cx="16" cy="18" rx="7" ry="10" fill={color.fill} stroke={color.stroke} strokeWidth="1.5"/>
                     {/* เมล็ดแถวซ้าย */}
-                    <circle cx="12" cy="14" r="1.8" fill={color.border} opacity="0.5"/>
-                    <circle cx="12" cy="18" r="1.8" fill={color.border} opacity="0.5"/>
-                    <circle cx="12" cy="22" r="1.8" fill={color.border} opacity="0.5"/>
+                    <circle cx="12" cy="14" r="2" fill={color.stroke} opacity="0.6"/>
+                    <circle cx="12" cy="18" r="2" fill={color.stroke} opacity="0.6"/>
+                    <circle cx="12" cy="22" r="2" fill={color.stroke} opacity="0.6"/>
                     {/* เมล็ดแถวกลาง */}
-                    <circle cx="16" cy="13" r="1.8" fill={color.border} opacity="0.5"/>
-                    <circle cx="16" cy="17" r="1.8" fill={color.border} opacity="0.5"/>
-                    <circle cx="16" cy="21" r="1.8" fill={color.border} opacity="0.5"/>
+                    <circle cx="16" cy="13" r="2" fill={color.stroke} opacity="0.6"/>
+                    <circle cx="16" cy="17" r="2" fill={color.stroke} opacity="0.6"/>
+                    <circle cx="16" cy="21" r="2" fill={color.stroke} opacity="0.6"/>
                     {/* เมล็ดแถวขวา */}
-                    <circle cx="20" cy="14" r="1.8" fill={color.border} opacity="0.5"/>
-                    <circle cx="20" cy="18" r="1.8" fill={color.border} opacity="0.5"/>
-                    <circle cx="20" cy="22" r="1.8" fill={color.border} opacity="0.5"/>
+                    <circle cx="20" cy="14" r="2" fill={color.stroke} opacity="0.6"/>
+                    <circle cx="20" cy="18" r="2" fill={color.stroke} opacity="0.6"/>
+                    <circle cx="20" cy="22" r="2" fill={color.stroke} opacity="0.6"/>
                     {/* ปลายฝัก */}
-                    <path d="M14 28 Q16 31 18 28" stroke={color.border} strokeWidth="1" fill="none" strokeLinecap="round"/>
+                    <path d="M14 28 Q16 31 18 28" stroke={color.stroke} strokeWidth="1.2" fill="none" strokeLinecap="round"/>
                   </svg>
                 )}
               </button>
@@ -315,13 +315,13 @@ export default function ArrangeGame({ onComplete }: { onComplete: (correct: bool
       <div style={{ display: 'flex', gap: 8, marginTop: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
         {COLORS.map((c, i) => (
           <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.7rem', color: 'var(--color-muted-foreground)' }}>
-            <svg width="14" height="14" viewBox="0 0 32 32" fill="none">
-              <path d="M10 8 Q6 4 8 1 Q10 4 12 7" fill="#4ADE80" stroke="#16A34A" strokeWidth="0.8"/>
-              <path d="M22 8 Q26 4 24 1 Q22 4 20 7" fill="#4ADE80" stroke="#16A34A" strokeWidth="0.8"/>
-              <ellipse cx="16" cy="18" rx="7" ry="10" fill={c.bg} stroke={c.border} strokeWidth="1.2"/>
-              <circle cx="14" cy="16" r="1.5" fill={c.border} opacity="0.5"/>
-              <circle cx="18" cy="16" r="1.5" fill={c.border} opacity="0.5"/>
-              <circle cx="16" cy="20" r="1.5" fill={c.border} opacity="0.5"/>
+            <svg width="16" height="16" viewBox="0 0 32 32" fill="none">
+              <path d="M10 8 Q6 4 8 1 Q10 4 12 7" fill={c.leaf}/>
+              <path d="M22 8 Q26 4 24 1 Q22 4 20 7" fill={c.leaf}/>
+              <ellipse cx="16" cy="18" rx="7" ry="10" fill={c.fill} stroke={c.stroke} strokeWidth="1.5"/>
+              <circle cx="14" cy="16" r="1.8" fill={c.stroke} opacity="0.6"/>
+              <circle cx="18" cy="16" r="1.8" fill={c.stroke} opacity="0.6"/>
+              <circle cx="16" cy="20" r="1.8" fill={c.stroke} opacity="0.6"/>
             </svg>
             {c.label}
           </div>
