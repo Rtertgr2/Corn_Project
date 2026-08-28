@@ -15,18 +15,17 @@ function RequirePhone({ children }: { children: JSX.Element }) {
 export default function App() {
   return (
     <>
-      {/* Nature floating elements */}
-      <div className="floating-corn" style={{ top: '8%', left: '5%', animationDelay: '0s' }}>🌿</div>
-      <div className="floating-corn" style={{ top: '25%', right: '8%', animationDelay: '2s' }}>🌽</div>
-      <div className="floating-corn" style={{ bottom: '15%', left: '10%', animationDelay: '4s' }}>🍃</div>
-      <div className="floating-corn" style={{ top: '60%', right: '15%', animationDelay: '3s' }}>🌾</div>
+      {/* Cypherpunk floating elements */}
+      <div className="floating-corn" style={{ top: '10%', left: '5%', animationDelay: '0s' }}>🌽</div>
+      <div className="floating-corn" style={{ top: '30%', right: '8%', animationDelay: '2s' }}>🌽</div>
+      <div className="floating-corn" style={{ bottom: '20%', left: '10%', animationDelay: '4s' }}>🌽</div>
       <div className="corn-pattern" />
       
       <div className="app-shell">
         <header className="app-header">
           <div className="mascot">🌽</div>
           <h1>ตลาดยิ่งเจริญ</h1>
-          <p className="subtitle">เล่นเกมส์ สะสมแต้ม แลกของรางวัล</p>
+          <p className="subtitle">// เล่นเกมส์ สะสมแต้ม แลกของรางวัล</p>
         </header>
         <Routes>
           <Route path="/" element={<PhoneView />} />
