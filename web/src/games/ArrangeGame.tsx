@@ -282,13 +282,27 @@ export default function ArrangeGame({ onComplete }: { onComplete: (correct: bool
                 }}
               >
                 {cell && (
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <ellipse cx="12" cy="13" rx="6" ry="8" fill={color.border} opacity="0.3" />
-                    <ellipse cx="12" cy="12" rx="5" ry="7" fill={color.bg} stroke={color.border} strokeWidth="1.5" />
-                    <path d="M12 5 L10 2 M12 5 L14 2 M12 5 L12 3" stroke={color.border} strokeWidth="1.5" strokeLinecap="round" />
-                    <ellipse cx="10" cy="11" rx="1.5" ry="2" fill={color.border} opacity="0.4" />
-                    <ellipse cx="14" cy="11" rx="1.5" ry="2" fill={color.border} opacity="0.4" />
-                    <ellipse cx="12" cy="14" rx="1.5" ry="2" fill={color.border} opacity="0.4" />
+                  <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+                    {/* ใบข้าวโพดซ้าย */}
+                    <path d="M10 8 Q6 4 8 1 Q10 4 12 7" fill="#4ADE80" stroke="#16A34A" strokeWidth="0.8"/>
+                    {/* ใบข้าวโพดขวา */}
+                    <path d="M22 8 Q26 4 24 1 Q22 4 20 7" fill="#4ADE80" stroke="#16A34A" strokeWidth="0.8"/>
+                    {/* ฝักข้าวโพด */}
+                    <ellipse cx="16" cy="18" rx="7" ry="10" fill={color.bg} stroke={color.border} strokeWidth="1.2"/>
+                    {/* เมล็ดแถวซ้าย */}
+                    <circle cx="12" cy="14" r="1.8" fill={color.border} opacity="0.5"/>
+                    <circle cx="12" cy="18" r="1.8" fill={color.border} opacity="0.5"/>
+                    <circle cx="12" cy="22" r="1.8" fill={color.border} opacity="0.5"/>
+                    {/* เมล็ดแถวกลาง */}
+                    <circle cx="16" cy="13" r="1.8" fill={color.border} opacity="0.5"/>
+                    <circle cx="16" cy="17" r="1.8" fill={color.border} opacity="0.5"/>
+                    <circle cx="16" cy="21" r="1.8" fill={color.border} opacity="0.5"/>
+                    {/* เมล็ดแถวขวา */}
+                    <circle cx="20" cy="14" r="1.8" fill={color.border} opacity="0.5"/>
+                    <circle cx="20" cy="18" r="1.8" fill={color.border} opacity="0.5"/>
+                    <circle cx="20" cy="22" r="1.8" fill={color.border} opacity="0.5"/>
+                    {/* ปลายฝัก */}
+                    <path d="M14 28 Q16 31 18 28" stroke={color.border} strokeWidth="1" fill="none" strokeLinecap="round"/>
                   </svg>
                 )}
               </button>
@@ -301,7 +315,14 @@ export default function ArrangeGame({ onComplete }: { onComplete: (correct: bool
       <div style={{ display: 'flex', gap: 8, marginTop: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
         {COLORS.map((c, i) => (
           <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.7rem', color: 'var(--color-muted-foreground)' }}>
-            <span style={{ width: 12, height: 12, borderRadius: 3, background: c.bg, border: `1px solid ${c.border}` }} />
+            <svg width="14" height="14" viewBox="0 0 32 32" fill="none">
+              <path d="M10 8 Q6 4 8 1 Q10 4 12 7" fill="#4ADE80" stroke="#16A34A" strokeWidth="0.8"/>
+              <path d="M22 8 Q26 4 24 1 Q22 4 20 7" fill="#4ADE80" stroke="#16A34A" strokeWidth="0.8"/>
+              <ellipse cx="16" cy="18" rx="7" ry="10" fill={c.bg} stroke={c.border} strokeWidth="1.2"/>
+              <circle cx="14" cy="16" r="1.5" fill={c.border} opacity="0.5"/>
+              <circle cx="18" cy="16" r="1.5" fill={c.border} opacity="0.5"/>
+              <circle cx="16" cy="20" r="1.5" fill={c.border} opacity="0.5"/>
+            </svg>
             {c.label}
           </div>
         ))}
