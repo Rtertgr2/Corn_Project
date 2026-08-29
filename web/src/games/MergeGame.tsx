@@ -273,9 +273,13 @@ export default function MergeGame({ onComplete }: { onComplete: (correct: boolea
   // Auto-drop items every 2 seconds
   useEffect(() => {
     if (gameOver) return;
+    // ตกทันทีตอนเริ่ม
+    const x = CONTAINER_WIDTH / 2 + (Math.random() - 0.5) * 60;
+    setItems(prev => [...prev, createItem(randomType(), x)]);
+    
     const dropInterval = setInterval(() => {
       setItems(prev => {
-        if (prev.length < 5) { // เติมให้มีอย่างน้อย 5 ช่อง
+        if (prev.length < 5) {
           const x = CONTAINER_WIDTH / 2 + (Math.random() - 0.5) * 60;
           return [...prev, createItem(randomType(), x)];
         }
