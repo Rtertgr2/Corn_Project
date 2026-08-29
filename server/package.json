@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "node node_modules/tsx/dist/cli.mjs watch src/index.ts",
+    "build": "cd ../web && npm run build",
     "start": "node node_modules/tsx/dist/cli.mjs src/index.ts",
-    "test": "node node_modules/vitest/vitest.mjs run",
-    "test:watch": "node node_modules/vitest/vitest.mjs"
+    "test": "node node_modules/vitest/vitest.mjs run"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -22,9 +22,5 @@
     "tsx": "^4.16.0",
     "typescript": "^5.5.0",
     "vitest": "^2.0.0"
-  },
-  "allowScripts": {
-    "esbuild@0.28.2": true,
-    "esbuild@0.21.5": true
   }
 }
