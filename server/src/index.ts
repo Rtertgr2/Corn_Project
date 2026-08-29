@@ -21,7 +21,7 @@ app.use('/api', playRouter);
 app.use('/api', rewardsRouter);
 
 // Serve frontend (production)
-const webDist = path.join(__dirname, '..', 'web', 'dist');
+const webDist = path.join(__dirname, '..', '..', 'web', 'dist');
 app.use(express.static(webDist));
 app.get('*', (_req, res) => {
   res.sendFile(path.join(webDist, 'index.html'));
