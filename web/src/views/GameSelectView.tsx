@@ -51,9 +51,11 @@ export default function GameSelectView() {
 
   return (
     <div>
-      {/* Pill HUD — แต้มขวา */}
+      {/* Pill HUD — heading + แต้ม */}
       <div className="points-hud">
-        <div style={{ flex: 1 }} />
+        <h2 className="section-title" style={{ margin: 0, paddingLeft: 'var(--space-md)', color: 'var(--color-on-primary)', flex: 1 }}>
+          <span className="icon">🎮</span> เลือกเกมที่อยากเล่น
+        </h2>
         <div className="points-right">
           <div className="star-icon">⭐</div>
           <div>
@@ -62,8 +64,6 @@ export default function GameSelectView() {
           </div>
         </div>
       </div>
-
-      <h2 className="section-title"><span className="icon">🎮</span> เลือกเกมที่อยากเล่น</h2>
 
       <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginBottom: 'var(--space-md)' }}>
         เล่นได้วันละ 1 เกม ได้ 1 แต้มต่อเกม
