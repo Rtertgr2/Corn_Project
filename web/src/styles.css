@@ -90,14 +90,14 @@ body {
 /* ─── Header ─── */
 .app-header {
   text-align: center;
-  padding: var(--space-xl) 0 var(--space-lg);
+  padding: var(--space-md) 0;
   position: relative;
 }
 
 
 
 .app-header .mascot {
-  font-size: 3.5rem; margin-bottom: var(--space-sm);
+  font-size: 2.5rem; margin-bottom: var(--space-xs);
   animation: mascot-bounce 2.5s ease-in-out infinite;
   display: inline-block;
 }
@@ -108,12 +108,12 @@ body {
 }
 
 .app-header h1 {
-  font-size: 1.6rem; font-weight: 800;
+  font-size: 1.4rem; font-weight: 800;
   color: var(--color-primary); letter-spacing: -0.01em;
 }
 
 .app-header .subtitle {
-  font-size: 0.9rem; color: var(--color-text-muted);
+  font-size: 0.8rem; color: var(--color-text-muted);
   margin-top: var(--space-xs); font-weight: 600;
 }
 
@@ -123,7 +123,7 @@ body {
   background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
   border-radius: var(--radius-full);
   padding: var(--space-sm);
-  margin-bottom: var(--space-lg);
+  margin-bottom: var(--space-md);
   box-shadow: var(--shadow-lg);
 }
 
@@ -181,7 +181,7 @@ body {
 }
 
 .points-hud .points-value {
-  font-size: 1.6rem; font-weight: 800;
+  font-size: 1.4rem; font-weight: 800;
   color: var(--color-on-primary); line-height: 1;
 }
 
@@ -504,7 +504,7 @@ body {
 }
 
 .result-screen .result-sub {
-  font-size: 0.9rem; color: var(--color-text-muted); margin-bottom: var(--space-xl);
+  font-size: 0.8rem; color: var(--color-text-muted); margin-bottom: var(--space-xl);
 }
 
 /* ─── Skeleton Loading ─── */
