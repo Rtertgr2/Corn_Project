@@ -1,12 +1,11 @@
 import { Router } from 'express';
 import { pool } from '../db.ts';
-import { computeBalanceFromRows } from '../points.ts';
 
 export const quizRouter = Router();
 
 const QUESTIONS = [
   { q: 'ตลาดยิ่งเจริญตั้งอยู่ที่เขตใด?', options: ['จตุจักร', 'บางเขน', 'บึงกุ่ม', 'ห้วยขวาง'], answer: 1 },
-  { q: 'ข้าวโพดนิยมปลูกในฤดูใด?', options: ['ฤดูฝน', 'ฤดูร้อน', 'ฤดูหนาว', 'ฤดูไม่มีฝน'], answer: 0 },
+  { q: 'ข้าวโพดนิยมปลูกในฤดูใด?', options: ['ฤดูฝน', 'ฤดูร้อน', 'ฤดูหนาว', 'ฤดูแล้ง'], answer: 0 },
   { q: 'เมล็ดข้าวโพดเมื่อรวมกันจะกลายเป็นอะไร?', options: ['ต้นกล้า', 'ดอกไม้', 'ผลไม้', 'ใบไม้'], answer: 0 },
 ];
 
@@ -24,20 +23,36 @@ quizRouter.post('/submit', async (req, res) => {
 
   const { rows: p } = await pool.query('SELECT id FROM players WHERE phone=$1', [phone]);
   if (p.length === 0) return res.status(400).json({ error: 'ไม่พบผู้เล่น' });
-  const playerId = p[0].id;
 
   let correctCount = 0;
   for (let i = 0; i < QUESTIONS.length; i++) {
     if (answers[i] === QUESTIONS[i].answer) correctCount++;
   }
 
-  // ถูกหมด = 5 แต้ม, ถูกบางข้อ = 1 แต้ม, ไม่ถูกเลย = 0
-  const points = correctCount === QUESTIONS.length ? 5 : correctCount > 0 ? 1 : 0;
+  let points = 0;
+  let message = '';
+  let nextAction: 'home' | 'mini-farm' = 'home';
+
+  if (correctCount === QUESTIONS.length) {
+    points = 5;
+    message = 'เยี่ยมมาก!';
+    nextAction = 'mini-farm';
+  } else if (correctCount > 0) {
+    points = 1;
+    message = `ตอบถูก ${correctCount} จาก ${QUESTIONS.length} ข้อ`;
+    nextAction = 'home';
+  } else {
+    points = 1;
+    message = 'ไว้โอกาสหน้านะครับ อย่าเสียใจนะ';
+    nextAction = 'home';
+  }
 
   res.json({
     correctCount,
     total: QUESTIONS.length,
     points,
+    message,
+    nextAction,
     perfect: correctCount === QUESTIONS.length,
   });
 });

@@ -17,10 +17,20 @@ playerRouter.post('/start', async (req, res) => {
   const { rows: p } = await pool.query(
     `INSERT INTO players (phone) VALUES ($1)
      ON CONFLICT (phone) DO UPDATE SET phone = EXCLUDED.phone
-     RETURNING id`,
+     RETURNING id, created_at`,
     [phone],
   );
   const playerId = p[0].id;
+  const createdAt = p[0].created_at;
+
+  // ถ้าเป็น player ใหม่ (created_at ใกล้เคียงกับตอน insert) → ให้ 1 แต้มเริ่มต้น
+  const isNewPlayer = createdAt && (Date.now() - new Date(createdAt).getTime() < 5000);
+  if (isNewPlayer) {
+    await pool.query(
+      'INSERT INTO plays (player_id, game_id, played_on, points_awarded, correct) VALUES ($1, $2, $3, 1, true)',
+      [playerId, 'welcome', today],
+    );
+  }
 
   const { rows: todayPlays } = await pool.query(
     'SELECT game_id, correct FROM plays WHERE player_id=$1 AND played_on=$2',

@@ -37,4 +37,11 @@ export const api = {
     req<{ balance: number; history: any[]; redemptions: any[] }>(
       `/api/me?phone=${encodeURIComponent(phone)}`,
     ),
+  quizQuestions: () =>
+    req<{ questions: { q: string; options: string[] }[] }>('/api/quiz/questions'),
+  quizSubmit: (phone: string, answers: number[]) =>
+    req<{ correctCount: number; total: number; points: number; perfect: boolean }>('/api/quiz/submit', {
+      method: 'POST',
+      body: JSON.stringify({ phone, answers }),
+    }),
 };
