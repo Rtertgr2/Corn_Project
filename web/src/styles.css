@@ -257,8 +257,8 @@ body {
   background: linear-gradient(135deg, #FBBF24, #F59E0B);
 }
 
-.game-option-card .game-icon.arrange {
-  background: linear-gradient(135deg, #34D399, #10B981);
+.game-option-card .game-icon.merge {
+  background: linear-gradient(135deg, #81C784, #4CAF50);
 }
 
 .game-option-card .game-info { flex: 1; }

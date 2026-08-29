@@ -1,6 +1,6 @@
 // server/src/games.ts
 
-export const GAME_IDS = ['quiz', 'arrange'] as const;
+export const GAME_IDS = ['quiz', 'merge'] as const;
 export type GameId = (typeof GAME_IDS)[number];
 
 /** ตรวจว่า game_id อยู่ในชุดที่รองรับ */
