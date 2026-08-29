@@ -11,7 +11,7 @@ export default function QuizGame({ onComplete }: { onComplete: (correct: boolean
       <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.15rem', fontWeight: 600, marginBottom: 'var(--space-md)', color: 'var(--color-text)' }}>
         {QUESTION}
       </h3>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: var(--space-sm) }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
         {OPTIONS.map((opt, i) => (
           <button
             key={i}
