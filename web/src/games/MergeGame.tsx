@@ -270,13 +270,20 @@ export default function MergeGame({ onComplete }: { onComplete: (correct: boolea
     return () => { if (animRef.current) cancelAnimationFrame(animRef.current); };
   }, [gameOver, combo, spawnParticles]);
 
-  const handleDrop = useCallback(() => {
+  // Auto-drop items every 2 seconds
+  useEffect(() => {
     if (gameOver) return;
-    const x = CONTAINER_WIDTH / 2 + (Math.random() - 0.5) * 60;
-    const newItem = createItem(nextType, x);
-    setItems(prev => [...prev, newItem]);
-    setNextType(randomType());
-  }, [nextType, gameOver]);
+    const dropInterval = setInterval(() => {
+      setItems(prev => {
+        if (prev.length < 5) { // เติมให้มีอย่างน้อย 5 ช่อง
+          const x = CONTAINER_WIDTH / 2 + (Math.random() - 0.5) * 60;
+          return [...prev, createItem(randomType(), x)];
+        }
+        return prev;
+      });
+    }, 2000);
+    return () => clearInterval(dropInterval);
+  }, [gameOver]);
 
   const formatTime = (s: number) => `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, '0')}`;
 
@@ -342,7 +349,6 @@ export default function MergeGame({ onComplete }: { onComplete: (correct: boolea
 
       {/* Container */}
       <div
-        onClick={handleDrop}
         style={{
           width: '100%',
           height: CONTAINER_HEIGHT,
@@ -351,7 +357,6 @@ export default function MergeGame({ onComplete }: { onComplete: (correct: boolea
           border: '3px solid var(--color-border-strong)',
           position: 'relative',
           overflow: 'hidden',
-          cursor: gameOver ? 'default' : 'pointer',
           boxShadow: 'inset 0 4px 20px rgba(0,0,0,0.15), var(--shadow-lg)',
         }}
       >
@@ -390,7 +395,7 @@ export default function MergeGame({ onComplete }: { onComplete: (correct: boolea
 
         {!gameOver && (
           <div style={{ position: 'absolute', top: 15, left: '50%', transform: 'translateX(-50%)', color: 'rgba(0,0,0,0.4)', fontSize: '0.75rem', fontWeight: 600, textAlign: 'center', pointerEvents: 'none' }}>
-            คลิกเพื่อปล่อย
+            เมล็ดกำลังตกลงมา...
           </div>
         )}
 
