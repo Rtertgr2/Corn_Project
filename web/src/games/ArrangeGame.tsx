@@ -6,12 +6,13 @@ type Cell = { type: number; id: number };
 type Grid = (Cell | null)[][];
 type Pos = { r: number; c: number };
 
-const COLS = 6;
-const ROWS = 6;
+const COLS = 5;
+const ROWS = 5;
 const TYPES = 5;
 const MIN_MATCH = 3;
 const MAX_MOVES = 20;
 const SCORE_TARGET = 150;
+const TIME_LIMIT = 60; // 60 วินาที
 
 // สีข้าวโพดแต่ละชนิด (fill = พื้นหลังช่อง, filter = ปรับสีตัว 🌽)
 const COLORS = [
@@ -118,11 +119,30 @@ export default function ArrangeGame({ onComplete }: { onComplete: (correct: bool
   const [selected, setSelected] = useState<Pos | null>(null);
   const [score, setScore] = useState(0);
   const [moves, setMoves] = useState(MAX_MOVES);
+  const [timeLeft, setTimeLeft] = useState(TIME_LIMIT);
   const [animating, setAnimating] = useState(false);
   const [matchedCells, setMatchedCells] = useState<Set<string>>(new Set());
   const [gameOver, setGameOver] = useState(false);
   const [message, setMessage] = useState('');
   const processingRef = useRef(false);
+
+  // Timer
+  useEffect(() => {
+    if (gameOver || animating) return;
+    const timer = setInterval(() => {
+      setTimeLeft(prev => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          setGameOver(true);
+          setMessage('หมดเวลา!');
+          setTimeout(() => onComplete(false), 1500);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [gameOver, animating, onComplete]);
 
   const processMatches = useCallback((currentGrid: Grid, currentScore: number, depth: number = 0): { grid: Grid; score: number } => {
     const matches = findMatches(currentGrid);
@@ -205,15 +225,21 @@ export default function ArrangeGame({ onComplete }: { onComplete: (correct: bool
     }, 300);
   }, [selected, grid, score, moves, animating, gameOver, processMatches, onComplete]);
 
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
   return (
     <div>
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
         <div>
-          <p style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: '1rem', color: 'var(--color-foreground)' }}>
+          <p style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: '1rem', color: 'var(--color-text)' }}>
             จับคู่ข้าวโพด
           </p>
-          <p style={{ fontSize: '0.8rem', color: 'var(--color-muted-foreground)' }}>
+          <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
             สลับตำแหน่งให้ได้ 3 ติดกัน
           </p>
         </div>
@@ -221,30 +247,48 @@ export default function ArrangeGame({ onComplete }: { onComplete: (correct: bool
           <p style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '1.2rem', color: 'var(--color-primary)' }}>
             {score}
           </p>
-          <p style={{ fontSize: '0.75rem', color: 'var(--color-muted-foreground)' }}>
+          <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
             {moves} ตาเหลือ
           </p>
         </div>
       </div>
 
-      {/* Progress bar */}
-      <div style={{
-        height: 6,
-        background: 'var(--color-muted)',
-        borderRadius: 3,
-        marginBottom: 12,
-        overflow: 'hidden',
-      }}>
+      {/* Timer + Progress */}
+      <div style={{ display: 'flex', gap: 12, marginBottom: 12, alignItems: 'center' }}>
+        {/* Timer */}
         <div style={{
-          height: '100%',
-          width: `${Math.min(100, (score / SCORE_TARGET) * 100)}%`,
-          background: score >= SCORE_TARGET ? 'var(--color-accent)' : 'var(--color-primary)',
+          background: timeLeft <= 10 ? 'var(--color-danger)' : 'var(--color-muted)',
+          color: timeLeft <= 10 ? '#fff' : 'var(--color-text)',
+          borderRadius: 'var(--radius-md)',
+          padding: '6px 12px',
+          fontFamily: 'var(--font-heading)',
+          fontWeight: 700,
+          fontSize: '1rem',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 6,
+        }}>
+          ⏱️ {formatTime(timeLeft)}
+        </div>
+        {/* Progress bar */}
+        <div style={{
+          flex: 1,
+          height: 6,
+          background: 'var(--color-muted)',
           borderRadius: 3,
-          transition: 'width 0.3s ease',
-        }} />
+          overflow: 'hidden',
+        }}>
+          <div style={{
+            height: '100%',
+            width: `${Math.min(100, (score / SCORE_TARGET) * 100)}%`,
+            background: score >= SCORE_TARGET ? 'var(--color-accent)' : 'var(--color-primary)',
+            borderRadius: 3,
+            transition: 'width 0.3s ease',
+          }} />
+        </div>
       </div>
 
-      {/* Grid */}
+      {/* Grid 5x5 */}
       <div style={{
         display: 'grid',
         gridTemplateColumns: `repeat(${COLS}, 1fr)`,
@@ -268,7 +312,7 @@ export default function ArrangeGame({ onComplete }: { onComplete: (correct: bool
                   aspectRatio: '1',
                   border: isSelected ? '3px solid var(--color-primary)' : '2px solid var(--color-border)',
                   borderRadius: 'var(--radius-sm)',
-                  background: cell ? color.fill : 'var(--color-card)',
+                  background: cell ? color.fill : 'var(--color-surface)',
                   cursor: animating ? 'default' : 'pointer',
                   transition: 'all 0.15s ease',
                   transform: isSelected ? 'scale(1.1)' : isMatched ? 'scale(0.8)' : 'scale(1)',
@@ -293,7 +337,7 @@ export default function ArrangeGame({ onComplete }: { onComplete: (correct: bool
       {/* Legend */}
       <div style={{ display: 'flex', gap: 8, marginTop: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
         {COLORS.map((c, i) => (
-          <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.7rem', color: 'var(--color-muted-foreground)' }}>
+          <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.7rem', color: 'var(--color-text-muted)' }}>
             <span style={{ 
               display: 'inline-flex',
               alignItems: 'center',
@@ -319,7 +363,7 @@ export default function ArrangeGame({ onComplete }: { onComplete: (correct: bool
 
       {/* Instructions */}
       {!gameOver && moves === MAX_MOVES && (
-        <p style={{ fontSize: '0.8rem', color: 'var(--color-muted-foreground)', textAlign: 'center', marginTop: 12 }}>
+        <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', textAlign: 'center', marginTop: 12 }}>
           คลิก 2 ช่องที่อยู่ติดกันเพื่อสลับตำแหน่ง ให้ได้สีเดียวกัน 3 ตัวขึ้นไป
         </p>
       )}
