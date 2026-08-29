@@ -31,14 +31,15 @@ CREATE TABLE IF NOT EXISTS redemptions (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+-- รางวัล 3 ชุด: 30 / 50 / 150 แต้ม
 INSERT INTO rewards (name, description, cost_points)
-SELECT 'ถุงผ้าตลาดยิ่งเจริญ', 'ถุงผ้าผ้าแคนวาส พิมพ์ลายตลาด', 10
-WHERE NOT EXISTS (SELECT 1 FROM rewards WHERE name = 'ถุงผ้าตลาดยิ่งเจริญ');
+SELECT 'ส่วนลดไอศครีมข้าวนัวโพด', 'ส่วนลด 30% สำหรับไอศครีมข้าวนัวโพด', 30
+WHERE NOT EXISTS (SELECT 1 FROM rewards WHERE name = 'ส่วนลดไอศครีมข้าวนัวโพด');
 
 INSERT INTO rewards (name, description, cost_points)
-SELECT 'คูปองส่วนลดค่าเดินทาง', 'ส่วนลด 20 บาท สำหรับร้านในตลาด', 20
-WHERE NOT EXISTS (SELECT 1 FROM rewards WHERE name = 'คูปองส่วนลดค่าเดินทาง');
+SELECT 'ส่วนลดร้านอาหาร 20%', 'ส่วนลด 20% สำหรับร้านอาหารในตลาดยิ่งเจริญ', 50
+WHERE NOT EXISTS (SELECT 1 FROM rewards WHERE name = 'ส่วนลดร้านอาหาร 20%');
 
 INSERT INTO rewards (name, description, cost_points)
-SELECT 'คูปองร้านค้าพิเศษ', 'คูปองมูลค่า 50 บาท ใช้กับร้านร่วมรายการ', 30
-WHERE NOT EXISTS (SELECT 1 FROM rewards WHERE name = 'คูปองร้านค้าพิเศษ');
+SELECT 'ชุดเซตของขวัญพรีเมียม', 'ชุดเซตของขวัญพรีเมียม สำหรับสมาชิก VIP', 150
+WHERE NOT EXISTS (SELECT 1 FROM rewards WHERE name = 'ชุดเซตของขวัญพรีเมียม');
