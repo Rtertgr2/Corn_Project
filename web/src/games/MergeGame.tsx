@@ -1,6 +1,6 @@
 // web/src/games/MergeGame.tsx
-// เกมรวมเมล็ดแบบ Suika — ผู้เล่นบังคับตำแหน่งตก + performance ดี
-import { useState, useCallback, useEffect, useRef } from 'react';
+// เกมรวมเมล็ดแบบ Suika — physics ถูกต้อง, ไม่ลอย, ไม่ค้าง
+import { useState, useEffect, useRef, useCallback } from 'react';
 
 type Item = {
   id: number;
@@ -14,7 +14,6 @@ type Item = {
   merging: boolean;
 };
 
-// 7 ชนิด — ใช้รูปจาก ComfyUI
 const TYPES = [
   { name: 'เมล็ด', img: '/assets/corn/v2_seed_00001__transparent.png', radius: 18 },
   { name: 'ต้นกล้า', img: '/assets/corn/v2_sprout_00001__transparent.png', radius: 24 },
@@ -27,8 +26,8 @@ const TYPES = [
 
 const W = 300;
 const H = 420;
-const GRAVITY = 0.3;
-const BOUNCE = 0.4;
+const GRAVITY = 0.5; // เพิ่ม gravity ให้ตกเร็วขึ้น
+const BOUNCE = 0.3;
 const PAD = 6;
 const MAX_ITEMS = 15;
 const TIME_LIMIT = 60;
@@ -36,7 +35,17 @@ const TIME_LIMIT = 60;
 let nextId = 0;
 
 function makeItem(type: number, x: number): Item {
-  return { id: nextId++, type, x, y: 20, vx: 0, vy: 0, radius: TYPES[type].radius, scale: 0, merging: false };
+  return {
+    id: nextId++,
+    type,
+    x,
+    y: 20,
+    vx: 0,
+    vy: 0,
+    radius: TYPES[type].radius,
+    scale: 1, // เริ่มที่ scale 1 เลย
+    merging: false,
+  };
 }
 
 function randType(): number {
@@ -54,19 +63,18 @@ export default function MergeGame({ onComplete }: { onComplete: (correct: boolea
   const [nextType] = useState(randType());
   const [timeLeft, setTimeLeft] = useState(TIME_LIMIT);
   const [gameOver, setGameOver] = useState(false);
-  const [combo, setCombo] = useState(0);
-  const [dropX, setDropX] = useState(W / 2); // ตำแหน่งที่ผู้เล่นเลือก
-  const [canDrop, setCanDrop] = useState(true); // พร้อมปล่อย
-  const animRef = useRef<number>();
-  const lastTimeRef = useRef(0);
-  const itemsRef = useRef(items);
-  const scoreRef = useRef(0);
-  const comboRef = useRef(0);
+  const [dropX, setDropX] = useState(W / 2);
+  const [canDrop, setCanDrop] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
+  const animRef = useRef<number>();
+  const itemsRef = useRef<Item[]>([]);
+  const scoreRef = useRef(0);
+  const gameOverRef = useRef(false);
 
+  // Sync refs
   useEffect(() => { itemsRef.current = items; }, [items]);
   useEffect(() => { scoreRef.current = score; }, [score]);
-  useEffect(() => { comboRef.current = combo; }, [combo]);
+  useEffect(() => { gameOverRef.current = gameOver; }, [gameOver]);
 
   // Timer
   useEffect(() => {
@@ -85,90 +93,151 @@ export default function MergeGame({ onComplete }: { onComplete: (correct: boolea
     return () => clearInterval(t);
   }, [gameOver, onComplete]);
 
-  // Physics — optimized, no freeze
+  // Physics loop — ใช้ useRef เพื่อไม่ให้ re-render
   useEffect(() => {
-    if (gameOver) return;
+    const loop = () => {
+      if (gameOverRef.current) {
+        animRef.current = requestAnimationFrame(loop);
+        return;
+      }
 
-    const loop = (time: number) => {
-      const dt = lastTimeRef.current ? Math.min((time - lastTimeRef.current) / 16, 2.5) : 1;
-      lastTimeRef.current = time;
+      const cur = itemsRef.current;
+      if (cur.length === 0) {
+        animRef.current = requestAnimationFrame(loop);
+        return;
+      }
 
-      const cur = itemsRef.current.map(i => ({ ...i }));
       let changed = false;
+      const updated = cur.map(item => ({ ...item }));
 
-      for (let i = 0; i < cur.length; i++) {
-        const a = cur[i];
-        if (a.scale < 1) { a.scale = Math.min(1, a.scale + 0.15 * dt); changed = true; }
+      for (let i = 0; i < updated.length; i++) {
+        const a = updated[i];
         if (a.merging) continue;
 
-        a.vy += GRAVITY * dt;
-        a.vx *= 0.998;
-        a.vy *= 0.998;
-        a.x += a.vx * dt;
-        a.y += a.vy * dt;
+        // Apply gravity
+        a.vy += GRAVITY;
+        a.y += a.vy;
+        a.x += a.vx;
 
-        const l = PAD + a.radius, r = W - PAD - a.radius, f = H - PAD - a.radius;
-        if (a.x < l) { a.x = l; a.vx = Math.abs(a.vx) * BOUNCE; }
-        if (a.x > r) { a.x = r; a.vx = -Math.abs(a.vx) * BOUNCE; }
-        if (a.y > f) {
-          a.y = f;
+        // Friction
+        a.vx *= 0.99;
+
+        // Wall collision
+        const left = PAD + a.radius;
+        const right = W - PAD - a.radius;
+        const floor = H - PAD - a.radius;
+
+        if (a.x < left) {
+          a.x = left;
+          a.vx = Math.abs(a.vx) * BOUNCE;
+          changed = true;
+        }
+        if (a.x > right) {
+          a.x = right;
+          a.vx = -Math.abs(a.vx) * BOUNCE;
+          changed = true;
+        }
+        if (a.y > floor) {
+          a.y = floor;
           a.vy = -Math.abs(a.vy) * BOUNCE * 0.5;
-          a.vx *= 0.85;
-          if (Math.abs(a.vy) < 0.3) a.vy = 0;
+          a.vx *= 0.9;
+          if (Math.abs(a.vy) < 0.5) a.vy = 0;
+          changed = true;
         }
 
-        for (let j = i + 1; j < cur.length; j++) {
-          const b = cur[j];
+        // Item collision
+        for (let j = i + 1; j < updated.length; j++) {
+          const b = updated[j];
           if (b.merging) continue;
 
-          const dx = b.x - a.x, dy = b.y - a.y;
+          const dx = b.x - a.x;
+          const dy = b.y - a.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          const minD = a.radius + b.radius;
+          const minDist = a.radius + b.radius;
 
-          if (dist < minD && dist > 0.1) {
+          if (dist < minDist && dist > 0.1) {
             if (a.type === b.type && a.type < TYPES.length - 1) {
-              const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
-              a.merging = true; b.merging = true;
-              cur.splice(j, 1); cur.splice(i, 1);
-              const ni = makeItem(a.type + 1, mx);
-              ni.y = my - 8; ni.vy = -1.5; ni.scale = 1.1;
-              cur.push(ni);
-              const pts = (a.type + 2) * 10 * (comboRef.current + 1);
+              // Merge
+              const mx = (a.x + b.x) / 2;
+              const my = (a.y + b.y) / 2;
+              a.merging = true;
+              b.merging = true;
+
+              const newItem = makeItem(a.type + 1, mx);
+              newItem.y = my - 10;
+              newItem.vy = -2;
+
+              // Remove old, add new
+              updated.splice(j, 1);
+              updated.splice(i, 1);
+              updated.push(newItem);
+
+              const pts = (a.type + 2) * 10;
               setScore(p => p + pts);
-              setCombo(p => p + 1);
-              setTimeout(() => setCombo(0), 500);
               changed = true;
               break;
             } else {
+              // Bounce
               const angle = Math.atan2(dy, dx);
-              const overlap = minD - dist;
-              const nx = Math.cos(angle), ny = Math.sin(angle);
-              a.x -= nx * overlap * 0.5; a.y -= ny * overlap * 0.5;
-              b.x += nx * overlap * 0.5; b.y += ny * overlap * 0.5;
-              const rvn = (b.vx - a.vx) * nx + (b.vy - a.vy) * ny;
-              if (rvn < 0) {
-                a.vx += rvn * nx * BOUNCE * 0.6;
-                a.vy += rvn * ny * BOUNCE * 0.6;
-                b.vx -= rvn * nx * BOUNCE * 0.6;
-                b.vy -= rvn * ny * BOUNCE * 0.6;
+              const overlap = minDist - dist;
+              const nx = Math.cos(angle);
+              const ny = Math.sin(angle);
+
+              a.x -= nx * overlap * 0.5;
+              a.y -= ny * overlap * 0.5;
+              b.x += nx * overlap * 0.5;
+              b.y += ny * overlap * 0.5;
+
+              const relVn = (b.vx - a.vx) * nx + (b.vy - a.vy) * ny;
+              if (relVn < 0) {
+                a.vx += relVn * nx * BOUNCE * 0.7;
+                a.vy += relVn * ny * BOUNCE * 0.7;
+                b.vx -= relVn * nx * BOUNCE * 0.7;
+                b.vy -= relVn * ny * BOUNCE * 0.7;
               }
+              changed = true;
             }
           }
         }
       }
 
-      const filtered = cur.filter(i => !i.merging);
+      // Filter out merging items
+      const filtered = updated.filter(i => !i.merging);
       if (filtered.length !== cur.length) changed = true;
-      if (changed) setItems(filtered);
+
+      if (changed) {
+        setItems(filtered);
+      }
 
       animRef.current = requestAnimationFrame(loop);
     };
 
     animRef.current = requestAnimationFrame(loop);
-    return () => { if (animRef.current) cancelAnimationFrame(animRef.current); };
+    return () => {
+      if (animRef.current) cancelAnimationFrame(animRef.current);
+    };
+  }, []);
+
+  // Auto-drop items
+  useEffect(() => {
+    if (gameOver) return;
+
+    // Drop first item immediately
+    const firstItem = makeItem(randType(), W / 2);
+    setItems([firstItem]);
+
+    const dropInterval = setInterval(() => {
+      setItems(prev => {
+        if (prev.length >= MAX_ITEMS) return prev;
+        const x = PAD + 25 + Math.random() * (W - PAD * 2 - 50);
+        return [...prev, makeItem(randType(), x)];
+      });
+    }, 800); // ทุก 0.8 วินาที
+
+    return () => clearInterval(dropInterval);
   }, [gameOver]);
 
-  // บังคับตำแหน่งตก — ใช้ mouse/touch
+  // Player-controlled drop
   const handlePointerMove = useCallback((e: React.PointerEvent) => {
     if (gameOver || !canDrop) return;
     const rect = containerRef.current?.getBoundingClientRect();
@@ -177,17 +246,14 @@ export default function MergeGame({ onComplete }: { onComplete: (correct: boolea
     setDropX(x);
   }, [gameOver, canDrop]);
 
-  // ปล่อย item
   const handlePointerUp = useCallback(() => {
     if (gameOver || !canDrop) return;
     if (itemsRef.current.length >= MAX_ITEMS) return;
-    
-    const ni = makeItem(nextType, dropX);
-    setItems(prev => [...prev, ni]);
+
+    const newItem = makeItem(nextType, dropX);
+    setItems(prev => [...prev, newItem]);
     setCanDrop(false);
-    
-    // หน่วงเล็กน้อยก่อนปล่อยตัวถัดไป
-    setTimeout(() => setCanDrop(true), 300);
+    setTimeout(() => setCanDrop(true), 500);
   }, [gameOver, canDrop, nextType, dropX]);
 
   const fmt = (s: number) => `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, '0')}`;
@@ -214,7 +280,7 @@ export default function MergeGame({ onComplete }: { onComplete: (correct: boolea
         </div>
       </div>
 
-      {/* Next + hint */}
+      {/* Next */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6, padding: '3px 8px', background: '#F3F4F6', borderRadius: 8 }}>
         <span style={{ fontSize: '0.65rem', color: 'var(--color-text-muted)' }}>ถัดไป:</span>
         <img src={TYPES[nextType].img} alt="" style={{ width: 22, height: 22, objectFit: 'contain' }} />
@@ -229,42 +295,61 @@ export default function MergeGame({ onComplete }: { onComplete: (correct: boolea
         </div>
       )}
 
-      {/* Container — แตะ/ลากเพื่อบังคับตำแหน่งตก */}
+      {/* Container */}
       <div
         ref={containerRef}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         style={{
-          width: '100%', height: H,
+          width: '100%',
+          height: H,
           background: 'linear-gradient(180deg, #FEF9C3 0%, #FDE68A 40%, #FCD34D 100%)',
-          borderRadius: 12, border: '3px solid #D97706',
-          position: 'relative', overflow: 'hidden', cursor: 'crosshair',
+          borderRadius: 12,
+          border: '3px solid #D97706',
+          position: 'relative',
+          overflow: 'hidden',
+          cursor: 'crosshair',
           boxShadow: 'inset 0 3px 12px rgba(0,0,0,0.08), 0 3px 10px rgba(0,0,0,0.1)',
         }}
       >
-        {/* Glass */}
+        {/* Glass effect */}
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(255,255,255,0.2) 0%, transparent 20%)', pointerEvents: 'none', borderRadius: 12 }} />
 
-        {/* ตัวที่กำลังจะตก — แสดงที่ตำแหน่ง dropX */}
+        {/* Preview item at drop position */}
         {canDrop && !gameOver && (
-          <img src={TYPES[nextType].img} alt="" style={{
-            position: 'absolute', left: dropX - TYPES[nextType].radius, top: 2,
-            width: TYPES[nextType].radius * 2, height: TYPES[nextType].radius * 2,
-            objectFit: 'contain', pointerEvents: 'none', opacity: 0.7,
-            transform: 'scale(0.9)',
-          }} />
+          <img
+            src={TYPES[nextType].img}
+            alt=""
+            style={{
+              position: 'absolute',
+              left: dropX - TYPES[nextType].radius,
+              top: 2,
+              width: TYPES[nextType].radius * 2,
+              height: TYPES[nextType].radius * 2,
+              objectFit: 'contain',
+              pointerEvents: 'none',
+              opacity: 0.6,
+            }}
+          />
         )}
 
         {/* Items */}
         {items.map(item => (
-          <img key={item.id} src={TYPES[item.type].img} alt="" style={{
-            position: 'absolute',
-            left: item.x - item.radius, top: item.y - item.radius,
-            width: item.radius * 2, height: item.radius * 2,
-            objectFit: 'contain', pointerEvents: 'none',
-            transform: `scale(${item.scale})`,
-            filter: item.merging ? 'brightness(1.3)' : 'none',
-          }} />
+          <img
+            key={item.id}
+            src={TYPES[item.type].img}
+            alt=""
+            style={{
+              position: 'absolute',
+              left: item.x - item.radius,
+              top: item.y - item.radius,
+              width: item.radius * 2,
+              height: item.radius * 2,
+              objectFit: 'contain',
+              pointerEvents: 'none',
+              filter: item.merging ? 'brightness(1.3)' : 'none',
+            }}
+          />
         ))}
 
         {/* Game over */}
@@ -290,9 +375,9 @@ export default function MergeGame({ onComplete }: { onComplete: (correct: boolea
       <div style={{ marginTop: 6, padding: 6, background: '#EFF6FF', borderRadius: 8, border: '1px solid #BFDBFE' }}>
         <p style={{ fontSize: '0.65rem', color: '#1E40AF', fontWeight: 600, marginBottom: 2 }}>💡 วิธีเล่น</p>
         <p style={{ fontSize: '0.6rem', color: '#3B82F6', lineHeight: 1.4 }}>
-          • ลากนิ้ว/เมาส์ซ้าย-ขวาเพื่อเลื่อนตำแหน่ง<br/>
-          • ปล่อยเพื่อให้เมล็ดตกลงมา<br/>
-          • ตัวเดียวกันชนกัน = รวมร่าง!<br/>
+          • ลากนิ้ว/เมาส์ซ้าย-ขวาเพื่อเลื่อนตำแหน่ง<br />
+          • ปล่อยเพื่อให้เมล็ดตกลงมา<br />
+          • ตัวเดียวกันชนกัน = รวมร่าง!<br />
           • สะสมแต้มใน 60 วินาที
         </p>
       </div>
