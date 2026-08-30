@@ -24,7 +24,6 @@ export default function PlayView() {
     }
     api.start(phone).then((r) => {
       setBalance(r.balance);
-      if (r.todayPlayed) setPlayed(true);
       setLoading(false);
     }).catch((e) => { setMsg(e.message); setLoading(false); });
   }, [phone, gameId, gameEntry, nav]);
@@ -40,22 +39,6 @@ export default function PlayView() {
   }
 
   if (!gameEntry || !Game) return <p className="msg-error">ไม่พบเกมนี้</p>;
-
-  if (played) {
-    return (
-      <div className="card result-screen">
-        <div className="result-icon">✅</div>
-        <p className="result-text">วันนี้เล่นแล้วครบ!</p>
-        <p className="result-sub">กลับมาเล่นใหม่พรุ่งนี้นะ</p>
-        <div className="points-badge" style={{ margin: '0 auto var(--space-md)' }}>
-          ⭐ {balance} แต้ม
-        </div>
-        <div className="nav-row">
-          <button className="btn btn-primary" onClick={() => nav('/me')}>👤 โปรไฟล์</button>
-        </div>
-      </div>
-    );
-  }
 
   const onComplete = async (correct: boolean) => {
     try {
