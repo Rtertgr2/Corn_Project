@@ -25,11 +25,12 @@ const TYPES = [
 
 const W = 300;
 const H = 420;
-const GRAVITY = 0.5;
+const GRAVITY = 0.4;
 const BOUNCE = 0.3;
 const PAD = 6;
-const MAX_ITEMS = 12;
+const MAX_ITEMS = 8;
 const TIME_LIMIT = 60;
+const DROP_COOLDOWN = 250; // ms ระหว่างคลิก
 
 let nextId = 0;
 
@@ -218,7 +219,7 @@ export default function MergeGame({ onComplete }: { onComplete: (correct: boolea
     itemsRef.current.push(newItem);
     setCanDrop(false);
     setNextType(randType());
-    setTimeout(() => setCanDrop(true), 300);
+    setTimeout(() => setCanDrop(true), DROP_COOLDOWN);
   }, [gameOver, canDrop, dropX]);
 
   const fmt = (s: number) => `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, '0')}`;
