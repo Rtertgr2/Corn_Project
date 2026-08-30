@@ -50,6 +50,8 @@ export default function MergeGame({ onComplete }: { onComplete: (correct: boolea
   const [renderTick, setRenderTick] = useState(0); // force re-render
   const [score, setScore] = useState(0);
   const [nextType, setNextType] = useState(randType());
+  const nextTypeRef = useRef(nextType);
+  useEffect(() => { nextTypeRef.current = nextType; }, [nextType]);
   const [timeLeft, setTimeLeft] = useState(TIME_LIMIT);
   const [gameOver, setGameOver] = useState(false);
   const [dropX, setDropX] = useState(W / 2);
@@ -212,12 +214,12 @@ export default function MergeGame({ onComplete }: { onComplete: (correct: boolea
     if (gameOver || !canDrop) return;
     if (itemsRef.current.length >= MAX_ITEMS) return;
 
-    const newItem = makeItem(nextType, dropX);
+    const newItem = makeItem(nextTypeRef.current, dropX);
     itemsRef.current.push(newItem);
     setCanDrop(false);
     setNextType(randType());
     setTimeout(() => setCanDrop(true), 300);
-  }, [gameOver, canDrop, nextType, dropX]);
+  }, [gameOver, canDrop, dropX]);
 
   const fmt = (s: number) => `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, '0')}`;
   const items = itemsRef.current;
