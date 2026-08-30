@@ -218,26 +218,7 @@ export default function MergeGame({ onComplete }: { onComplete: (correct: boolea
     };
   }, []);
 
-  // Auto-drop items
-  useEffect(() => {
-    if (gameOver) return;
-
-    // Drop first item immediately
-    const firstItem = makeItem(randType(), W / 2);
-    setItems([firstItem]);
-
-    const dropInterval = setInterval(() => {
-      setItems(prev => {
-        if (prev.length >= MAX_ITEMS) return prev;
-        const x = PAD + 25 + Math.random() * (W - PAD * 2 - 50);
-        return [...prev, makeItem(randType(), x)];
-      });
-    }, 800); // ทุก 0.8 วินาที
-
-    return () => clearInterval(dropInterval);
-  }, [gameOver]);
-
-  // Player-controlled drop
+  // Player-controlled drop — คลิก/แตะเพื่อปล่อย
   const handlePointerMove = useCallback((e: React.PointerEvent) => {
     if (gameOver || !canDrop) return;
     const rect = containerRef.current?.getBoundingClientRect();
@@ -246,14 +227,14 @@ export default function MergeGame({ onComplete }: { onComplete: (correct: boolea
     setDropX(x);
   }, [gameOver, canDrop]);
 
-  const handlePointerUp = useCallback(() => {
+  const handlePointerDown = useCallback(() => {
     if (gameOver || !canDrop) return;
     if (itemsRef.current.length >= MAX_ITEMS) return;
 
     const newItem = makeItem(nextType, dropX);
     setItems(prev => [...prev, newItem]);
     setCanDrop(false);
-    setTimeout(() => setCanDrop(true), 500);
+    setTimeout(() => setCanDrop(true), 300);
   }, [gameOver, canDrop, nextType, dropX]);
 
   const fmt = (s: number) => `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, '0')}`;
@@ -299,7 +280,7 @@ export default function MergeGame({ onComplete }: { onComplete: (correct: boolea
       <div
         ref={containerRef}
         onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerUp}
+        onPointerDown={handlePointerDown}
         style={{
           width: '100%',
           height: H,
@@ -376,7 +357,7 @@ export default function MergeGame({ onComplete }: { onComplete: (correct: boolea
         <p style={{ fontSize: '0.65rem', color: '#1E40AF', fontWeight: 600, marginBottom: 2 }}>💡 วิธีเล่น</p>
         <p style={{ fontSize: '0.6rem', color: '#3B82F6', lineHeight: 1.4 }}>
           • ลากนิ้ว/เมาส์ซ้าย-ขวาเพื่อเลื่อนตำแหน่ง<br />
-          • ปล่อยเพื่อให้เมล็ดตกลงมา<br />
+          • คลิก/แตะเพื่อให้เมล็ดตกลงมา<br />
           • ตัวเดียวกันชนกัน = รวมร่าง!<br />
           • สะสมแต้มใน 60 วินาที
         </p>
