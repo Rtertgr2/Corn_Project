@@ -14,13 +14,13 @@ type Item = {
 };
 
 const TYPES = [
-  { name: 'เมล็ด', img: '/assets/corn/v2_seed_00001__transparent.png', radius: 18 },
-  { name: 'ต้นกล้า', img: '/assets/corn/v2_sprout_00001__transparent.png', radius: 24 },
-  { name: 'ต้นอ่อน', img: '/assets/corn/v2_young_corn_00001__transparent.png', radius: 30 },
-  { name: 'ข้าวโพด', img: '/assets/corn/v2_ripe_corn_00001__transparent.png', radius: 36 },
-  { name: 'ข้าวสีทอง', img: '/assets/corn/v2_golden_rice_00001__transparent.png', radius: 30 },
-  { name: 'ข้าวกล้อง', img: '/assets/corn/v2_brown_rice_00001__transparent.png', radius: 36 },
-  { name: 'ไอศครีม', img: '/assets/corn/v2_ice_cream_00001__transparent.png', radius: 42 },
+  { name: 'เมล็ด', img: '/assets/corn/seed.png', radius: 18 },
+  { name: 'ต้นกล้า', img: '/assets/corn/sprout.png', radius: 24 },
+  { name: 'ต้นอ่อน', img: '/assets/corn/young_corn.png', radius: 30 },
+  { name: 'ข้าวโพด', img: '/assets/corn/ripe_corn.png', radius: 36 },
+  { name: 'ข้าวสีทอง', img: '/assets/corn/golden_rice.png', radius: 30 },
+  { name: 'ข้าวกล้อง', img: '/assets/corn/brown_rice.png', radius: 36 },
+  { name: 'ไอศครีม', img: '/assets/corn/ice_cream.png', radius: 42 },
 ];
 
 const W = 300;
