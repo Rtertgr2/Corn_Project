@@ -1,5 +1,5 @@
 // web/src/games/MergeGame.tsx
-// เกมรวมเมล็ดแบบ Suika — user-controlled drop, no freeze, optimized physics
+// เกมรวมเมล็ดแบบ Suika — Canvas 2D rendering, 50-100 ตัวไม่ค้าง
 import { useState, useEffect, useRef, useCallback } from 'react';
 
 type Item = {
@@ -28,9 +28,9 @@ const H = 420;
 const GRAVITY = 0.4;
 const BOUNCE = 0.3;
 const PAD = 6;
-const MAX_ITEMS = 20;
+const MAX_ITEMS = 50;
 const TIME_LIMIT = 60;
-const DROP_COOLDOWN = 150; // ms ระหว่างคลิก
+const DROP_COOLDOWN = 100;
 
 let nextId = 0;
 
@@ -48,24 +48,41 @@ function randType(): number {
 }
 
 export default function MergeGame({ onComplete }: { onComplete: (correct: boolean) => void }) {
-  const [renderTick, setRenderTick] = useState(0); // force re-render
   const [score, setScore] = useState(0);
   const [nextType, setNextType] = useState(randType());
-  const nextTypeRef = useRef(nextType);
-  useEffect(() => { nextTypeRef.current = nextType; }, [nextType]);
   const [timeLeft, setTimeLeft] = useState(TIME_LIMIT);
   const [gameOver, setGameOver] = useState(false);
-  const [dropX, setDropX] = useState(W / 2);
   const [canDrop, setCanDrop] = useState(true);
+
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const animRef = useRef<number>();
   const itemsRef = useRef<Item[]>([]);
   const scoreRef = useRef(0);
   const gameOverRef = useRef(false);
-  const renderTickRef = useRef(0);
+  const dropXRef = useRef(W / 2);
+  const dropXDisplayRef = useRef(W / 2);
+  const nextTypeRef = useRef(nextType);
+  const canDropRef = useRef(true);
+  const imagesRef = useRef<HTMLImageElement[]>([]);
+  const imagesLoadedRef = useRef(false);
 
-  useEffect(() => { scoreRef.current = score; }, [score]);
-  useEffect(() => { gameOverRef.current = gameOver; }, [gameOver]);
+  useEffect(() => { nextTypeRef.current = nextType; }, [nextType]);
+  useEffect(() => { canDropRef.current = canDrop; }, [canDrop]);
+
+  // Load images once
+  useEffect(() => {
+    let loaded = 0;
+    TYPES.forEach((t, i) => {
+      const img = new Image();
+      img.src = t.img;
+      img.onload = () => {
+        loaded++;
+        if (loaded === TYPES.length) imagesLoadedRef.current = true;
+      };
+      imagesRef.current[i] = img;
+    });
+  }, []);
 
   // Timer
   useEffect(() => {
@@ -84,23 +101,73 @@ export default function MergeGame({ onComplete }: { onComplete: (correct: boolea
     return () => clearInterval(t);
   }, [gameOver, onComplete]);
 
-  // Physics loop — optimized with spatial check
+  // Draw function
+  const draw = useCallback((ctx: CanvasRenderingContext2D) => {
+    if (!imagesLoadedRef.current) return;
+
+    ctx.clearRect(0, 0, W, H);
+
+    // Draw items
+    const items = itemsRef.current;
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      if (item.merging) continue;
+      const img = imagesRef.current[item.type];
+      if (!img) continue;
+      const size = item.radius * 2;
+      ctx.drawImage(img, item.x - item.radius, item.y - item.radius, size, size);
+    }
+
+    // Draw preview at drop position
+    if (canDropRef.current && !gameOverRef.current) {
+      const previewType = nextTypeRef.current;
+      const previewImg = imagesRef.current[previewType];
+      if (previewImg) {
+        const r = TYPES[previewType].radius;
+        ctx.globalAlpha = 0.5;
+        ctx.drawImage(previewImg, dropXDisplayRef.current - r, 2, r * 2, r * 2);
+        ctx.globalAlpha = 1;
+      }
+    }
+
+    // Game over overlay
+    if (gameOverRef.current) {
+      ctx.fillStyle = 'rgba(0,0,0,0.6)';
+      ctx.fillRect(0, 0, W, H);
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 20px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(`หมดเวลา! ได้ ${scoreRef.current} แต้ม`, W / 2, H / 2 - 10);
+      ctx.fillStyle = '#FCD34D';
+      ctx.font = '14px sans-serif';
+      ctx.fillText('🌽 ขอบคุณที่เล่น!', W / 2, H / 2 + 20);
+    }
+  }, []);
+
+  // Physics + render loop
   useEffect(() => {
     let lastTime = 0;
-    let frameCount = 0;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
 
     const loop = (time: number) => {
       animRef.current = requestAnimationFrame(loop);
 
-      if (gameOverRef.current) return;
+      if (gameOverRef.current) {
+        draw(ctx);
+        return;
+      }
 
       const dt = lastTime ? Math.min((time - lastTime) / 16, 2) : 1;
       lastTime = time;
 
       const items = itemsRef.current;
-      if (items.length === 0) return;
-
-      let changed = false;
+      if (items.length === 0) {
+        draw(ctx);
+        return;
+      }
 
       // Update physics
       for (let i = 0; i < items.length; i++) {
@@ -112,27 +179,25 @@ export default function MergeGame({ onComplete }: { onComplete: (correct: boolea
         a.x += a.vx * dt;
         a.vx *= 0.99;
 
-        // Wall collision
         const left = PAD + a.radius;
         const right = W - PAD - a.radius;
         const floor = H - PAD - a.radius;
 
-        if (a.x < left) { a.x = left; a.vx = Math.abs(a.vx) * BOUNCE; changed = true; }
-        if (a.x > right) { a.x = right; a.vx = -Math.abs(a.vx) * BOUNCE; changed = true; }
+        if (a.x < left) { a.x = left; a.vx = Math.abs(a.vx) * BOUNCE; }
+        if (a.x > right) { a.x = right; a.vx = -Math.abs(a.vx) * BOUNCE; }
         if (a.y > floor) {
           a.y = floor;
           a.vy = -Math.abs(a.vy) * BOUNCE * 0.5;
           a.vx *= 0.9;
           if (Math.abs(a.vy) < 0.5) a.vy = 0;
-          changed = true;
         }
       }
 
-      // Item collision — only check nearby pairs (O(n²/2) but early exit)
+      // Item collision
       for (let i = 0; i < items.length; i++) {
         const a = items[i];
         if (a.merging) continue;
-        
+
         for (let j = i + 1; j < items.length; j++) {
           const b = items[j];
           if (b.merging) continue;
@@ -142,15 +207,12 @@ export default function MergeGame({ onComplete }: { onComplete: (correct: boolea
           const distSq = dx * dx + dy * dy;
           const minDist = a.radius + b.radius;
 
-          // Skip if too far (early exit optimization)
-          if (distSq > minDist * minDist) continue;
-          if (distSq < 0.01) continue;
+          if (distSq > minDist * minDist || distSq < 0.01) continue;
 
           const dist = Math.sqrt(distSq);
 
           if (dist < minDist) {
             if (a.type === b.type && a.type < TYPES.length - 1) {
-              // Merge
               const mx = (a.x + b.x) / 2;
               const my = (a.y + b.y) / 2;
               a.merging = true;
@@ -164,10 +226,8 @@ export default function MergeGame({ onComplete }: { onComplete: (correct: boolea
               const pts = (a.type + 2) * 10;
               scoreRef.current += pts;
               setScore(scoreRef.current);
-              changed = true;
               break;
             } else {
-              // Bounce
               const angle = Math.atan2(dy, dx);
               const overlap = minDist - dist;
               const nx = Math.cos(angle);
@@ -185,7 +245,6 @@ export default function MergeGame({ onComplete }: { onComplete: (correct: boolea
                 b.vx -= relVn * nx * BOUNCE * 0.7;
                 b.vy -= relVn * ny * BOUNCE * 0.7;
               }
-              changed = true;
             }
           }
         }
@@ -195,47 +254,41 @@ export default function MergeGame({ onComplete }: { onComplete: (correct: boolea
       for (let i = items.length - 1; i >= 0; i--) {
         if (items[i].merging) {
           items.splice(i, 1);
-          changed = true;
         }
       }
 
-      // Re-render every 4 frames to reduce DOM updates (was 3)
-      frameCount++;
-      if (changed && frameCount % 4 === 0) {
-        renderTickRef.current++;
-        setRenderTick(renderTickRef.current);
-      }
+      // Smooth drop preview animation
+      dropXDisplayRef.current += (dropXRef.current - dropXDisplayRef.current) * 0.3;
+
+      draw(ctx);
     };
 
     animRef.current = requestAnimationFrame(loop);
     return () => {
       if (animRef.current) cancelAnimationFrame(animRef.current);
     };
+  }, [draw]);
+
+  const handlePointerMove = useCallback((e: React.PointerEvent) => {
+    if (gameOverRef.current || !canDropRef.current) return;
+    const rect = canvasRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    dropXRef.current = Math.max(PAD + 20, Math.min(W - PAD - 20, e.clientX - rect.left));
   }, []);
 
-  // Player-controlled drop
-  const handlePointerMove = useCallback((e: React.PointerEvent) => {
-    if (gameOver || !canDrop) return;
-    const rect = containerRef.current?.getBoundingClientRect();
-    if (!rect) return;
-    const x = Math.max(PAD + 20, Math.min(W - PAD - 20, e.clientX - rect.left));
-    setDropX(x);
-  }, [gameOver, canDrop]);
-
   const handlePointerDown = useCallback(() => {
-    if (gameOver || !canDrop) return;
+    if (gameOverRef.current || !canDropRef.current) return;
     if (itemsRef.current.length >= MAX_ITEMS) return;
 
-    const newItem = makeItem(nextTypeRef.current, dropX);
+    const newItem = makeItem(nextTypeRef.current, dropXRef.current);
     itemsRef.current.push(newItem);
     setCanDrop(false);
     setNextType(randType());
     setTimeout(() => setCanDrop(true), DROP_COOLDOWN);
-  }, [gameOver, canDrop, dropX]);
+  }, []);
 
   const fmt = (s: number) => `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, '0')}`;
-  const items = itemsRef.current;
-  const danger = items.some(i => i.y < 30 && !i.merging);
+  const danger = itemsRef.current.length > 30;
 
   return (
     <div style={{ maxWidth: 340, margin: '0 auto', userSelect: 'none', touchAction: 'none' }}>
@@ -273,69 +326,32 @@ export default function MergeGame({ onComplete }: { onComplete: (correct: boolea
         </div>
       )}
 
-      {/* Container */}
+      {/* Canvas container */}
       <div
         ref={containerRef}
-        onPointerMove={handlePointerMove}
-        onPointerDown={handlePointerDown}
         style={{
           width: '100%',
-          height: H,
-          background: 'linear-gradient(180deg, #FEF9C3 0%, #FDE68A 40%, #FCD34D 100%)',
           borderRadius: 12,
           border: '3px solid #D97706',
-          position: 'relative',
           overflow: 'hidden',
-          cursor: 'crosshair',
           boxShadow: 'inset 0 3px 12px rgba(0,0,0,0.08), 0 3px 10px rgba(0,0,0,0.1)',
         }}
       >
-        {/* Glass effect */}
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(255,255,255,0.2) 0%, transparent 20%)', pointerEvents: 'none', borderRadius: 12 }} />
-
-        {/* Preview item at drop position */}
-        {canDrop && !gameOver && (
-          <img
-            src={TYPES[nextType].img}
-            alt=""
-            style={{
-              position: 'absolute',
-              left: dropX - TYPES[nextType].radius,
-              top: 2,
-              width: TYPES[nextType].radius * 2,
-              height: TYPES[nextType].radius * 2,
-              objectFit: 'contain',
-              pointerEvents: 'none',
-              opacity: 0.6,
-            }}
-          />
-        )}
-
-        {/* Items */}
-        {items.map(item => (
-          <img
-            key={item.id}
-            src={TYPES[item.type].img}
-            alt=""
-            style={{
-              position: 'absolute',
-              left: item.x - item.radius,
-              top: item.y - item.radius,
-              width: item.radius * 2,
-              height: item.radius * 2,
-              objectFit: 'contain',
-              pointerEvents: 'none',
-            }}
-          />
-        ))}
-
-        {/* Game over */}
-        {gameOver && (
-          <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 6, borderRadius: 12 }}>
-            <p style={{ color: '#fff', fontSize: '1.3rem', fontWeight: 800 }}>หมดเวลา! ได้ {score} แต้ม</p>
-            <p style={{ color: '#FCD34D', fontSize: '0.8rem' }}>🌽 ขอบคุณที่เล่น!</p>
-          </div>
-        )}
+        <canvas
+          ref={canvasRef}
+          width={W}
+          height={H}
+          onPointerMove={handlePointerMove}
+          onPointerDown={handlePointerDown}
+          style={{
+            display: 'block',
+            width: '100%',
+            height: 'auto',
+            background: 'linear-gradient(180deg, #FEF9C3 0%, #FDE68A 40%, #FCD34D 100%)',
+            cursor: 'crosshair',
+            touchAction: 'none',
+          }}
+        />
       </div>
 
       {/* Chain */}
