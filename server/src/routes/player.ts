@@ -26,10 +26,17 @@ playerRouter.post('/start', async (req, res) => {
   // ถ้าเป็น player ใหม่ (created_at ใกล้เคียงกับตอน insert) → ให้ 1 แต้มเริ่มต้น
   const isNewPlayer = createdAt && (Date.now() - new Date(createdAt).getTime() < 5000);
   if (isNewPlayer) {
-    await pool.query(
-      'INSERT INTO plays (player_id, game_id, played_on, points_awarded, correct) VALUES ($1, $2, $3, 1, true)',
-      [playerId, 'welcome', today],
+    // เช็คว่ายังไม่มี play วันนี้ก่อน insert
+    const { rows: existingPlay } = await pool.query(
+      'SELECT id FROM plays WHERE player_id=$1 AND played_on=$2',
+      [playerId, today],
     );
+    if (existingPlay.length === 0) {
+      await pool.query(
+        'INSERT INTO plays (player_id, game_id, played_on, points_awarded, correct) VALUES ($1, $2, $3, 1, true)',
+        [playerId, 'welcome', today],
+      );
+    }
   }
 
   const { rows: todayPlays } = await pool.query(
