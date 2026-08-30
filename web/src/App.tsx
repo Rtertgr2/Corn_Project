@@ -37,6 +37,13 @@ export default function App() {
           <Route path="/me" element={<RequirePhone><MeView /></RequirePhone>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
+        {/* Bottom Navigation */}
+        <nav className="bottom-nav">
+          <button className="btn-sprite home" onClick={() => nav('/')} title="หน้าหลัก" />
+          <button className="btn-sprite corn" onClick={() => nav('/play')} title="เล่นเกม" />
+          <button className="btn-sprite gift" onClick={() => nav('/rewards')} title="ของรางวัล" />
+          <button className="btn-sprite star" onClick={() => nav('/me')} title="โปรไฟล์" />
+        </nav>
       </div>
     </>
   );

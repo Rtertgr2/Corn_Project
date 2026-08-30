@@ -114,6 +114,60 @@ body {
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
+/* ─── Picture Frame 3D (ใช้รูป frame_3d.png) ─── */
+.frame-3d {
+  background-image: url('/assets/ui/frame_3d.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  padding: var(--space-xl);
+  margin-bottom: var(--space-md);
+  position: relative;
+  filter: drop-shadow(0 6px 16px rgba(21, 128, 61, 0.18));
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.frame-3d:hover {
+  transform: translateY(-3px);
+  filter: drop-shadow(0 10px 24px rgba(21, 128, 61, 0.25));
+}
+
+.frame-3d:active {
+  transform: translateY(2px);
+  filter: drop-shadow(0 2px 8px rgba(21, 128, 61, 0.15));
+}
+
+/* ─── 3D Sprite Button (buttons_3d.png) ─── */
+.btn-sprite {
+  background-image: url('/assets/ui/buttons_3d.png');
+  background-size: 500% 100%;
+  background-repeat: no-repeat;
+  border: none;
+  border-radius: 20px;
+  min-height: 56px;
+  min-width: 56px;
+  padding: 0;
+  cursor: pointer;
+  transition: transform 0.1s ease, filter 0.1s ease;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+}
+
+.btn-sprite:hover {
+  transform: translateY(-2px);
+  filter: drop-shadow(0 6px 12px rgba(0,0,0,0.25));
+}
+
+.btn-sprite:active {
+  transform: translateY(2px);
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+}
+
+.btn-sprite.star  { background-position: 0% 0; }
+.btn-sprite.corn  { background-position: 25% 0; }
+.btn-sprite.gift  { background-position: 50% 0; }
+.btn-sprite.user  { background-position: 75% 0; }
+.btn-sprite.home  { background-position: 100% 0; }
+
 .card-3d:hover {
   transform: translateY(-2px);
   box-shadow: 
@@ -471,6 +525,18 @@ body {
   font-weight: 800; color: var(--color-primary);
   font-size: 0.95rem; display: flex; align-items: center;
   gap: 4px; white-space: nowrap;
+}
+
+.bottom-nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 8px;
+  margin-top: var(--space-lg);
+  padding: var(--space-sm) 0;
+  background: var(--color-surface);
+  border-radius: var(--radius-full);
+  box-shadow: 0 -4px 20px rgba(21, 128, 61, 0.1);
 }
 
 /* ─── Points Badge ─── */
