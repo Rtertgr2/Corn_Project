@@ -66,7 +66,7 @@ export default function GameSelectView() {
       ))}
 
       <div className="nav-row">
-        <button className="btn btn-secondary" onClick={() => nav('/me')}>👤 โปรไฟล์</button>
+        <button className="btn-3d btn-secondary" onClick={() => nav('/me')}>👤 โปรไฟล์</button>
       </div>
     </div>
   );

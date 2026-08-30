@@ -28,7 +28,7 @@ export default function MeView() {
 
   return (
     <div>
-      <div className="card" style={{ textAlign: 'center', marginBottom: 'var(--space-md)' }}>
+      <div className="card-3d" style={{ textAlign: 'center', marginBottom: 'var(--space-md)' }}>
         <div style={{ 
           width: 64, height: 64, borderRadius: 'var(--radius-full)', 
           background: 'linear-gradient(135deg, var(--color-primary), var(--color-primary-light))',
@@ -59,7 +59,7 @@ export default function MeView() {
         </div>
       </div>
 
-      <div className="card" style={{ marginBottom: 'var(--space-md)' }}>
+      <div className="card-3d" style={{ marginBottom: 'var(--space-md)' }}>
         <h3 className="section-title" style={{ marginTop: 0 }}><span className="icon">📜</span> ประวัติการเล่น</h3>
         {data.history.length === 0 ? (
           <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', padding: 'var(--space-md) 0' }}>ยังไม่เคยเล่น</p>
@@ -76,7 +76,7 @@ export default function MeView() {
         )}
       </div>
 
-      <div className="card">
+      <div className="card-3d">
         <h3 className="section-title" style={{ marginTop: 0 }}><span className="icon">🎫</span> คูปองที่แลก</h3>
         {data.redemptions.length === 0 ? (
           <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', padding: 'var(--space-md) 0' }}>ยังไม่เคยแลก</p>
@@ -93,10 +93,10 @@ export default function MeView() {
       {msg && <p className="msg-error" style={{ marginTop: 'var(--space-md)' }}>{msg}</p>}
 
       <div className="nav-row">
-        <button className="btn btn-primary" onClick={() => nav('/play')}>
+        <button className="btn-3d btn-primary" onClick={() => nav('/play')}>
           🎮 เล่นเกม
         </button>
-        <button className="btn btn-accent" onClick={() => nav('/rewards')}>
+        <button className="btn-3d btn-accent" onClick={() => nav('/rewards')}>
           🎁 ของรางวัล
         </button>
       </div>

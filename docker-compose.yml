@@ -17,5 +17,26 @@ services:
       timeout: 5s
       retries: 5
 
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: corn_app
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 10000
+      DATABASE_URL: postgres://postgres:postgres@corn_postgres:5432/corn
+    ports:
+      - "3001:10000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:10000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
 volumes:
   corn_pgdata:

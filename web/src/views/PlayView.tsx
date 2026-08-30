@@ -30,7 +30,7 @@ export default function PlayView() {
 
   if (loading) {
     return (
-      <div className="card">
+      <div className="card-3d">
         <div className="skeleton skeleton-title" />
         <div className="skeleton skeleton-text" style={{ width: '80%' }} />
         <div className="skeleton skeleton-btn" />
@@ -62,7 +62,7 @@ export default function PlayView() {
         </div>
       </div>
 
-      <div className="card">
+      <div className="card-3d">
         <Game onComplete={onComplete} />
       </div>
 

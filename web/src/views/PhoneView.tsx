@@ -22,7 +22,7 @@ export default function PhoneView() {
   };
 
   return (
-    <div className="card" style={{ marginTop: 'var(--space-lg)' }}>
+    <div className="card-3d" style={{ marginTop: 'var(--space-lg)' }}>
       <div style={{ textAlign: 'center', marginBottom: 'var(--space-lg)' }}>
         <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ margin: '0 auto var(--space-md)' }}>
           <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
@@ -54,7 +54,7 @@ export default function PhoneView() {
       {err && <p className="msg-error" style={{ marginTop: 'var(--space-md)' }}>{err}</p>}
 
       <button
-        className="btn btn-accent btn-block btn-lg"
+        className="btn-3d btn-accent btn-block btn-lg"
         disabled={loading || phone.length < 9}
         onClick={submit}
         style={{ marginTop: 'var(--space-md)' }}

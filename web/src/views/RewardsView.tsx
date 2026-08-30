@@ -95,10 +95,10 @@ export default function RewardsView() {
       )}
 
       <div className="nav-row">
-        <button className="btn btn-secondary" onClick={() => nav('/me')}>
+        <button className="btn-3d btn-secondary" onClick={() => nav('/me')}>
           👤 โปรไฟล์
         </button>
-        <button className="btn btn-primary" onClick={() => nav('/play')}>
+        <button className="btn-3d btn-primary" onClick={() => nav('/play')}>
           🎮 เล่นเกม
         </button>
       </div>
