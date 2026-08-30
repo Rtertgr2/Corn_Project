@@ -19,10 +19,10 @@ export const api = {
       '/api/start',
       { method: 'POST', body: JSON.stringify({ phone }) },
     ),
-  play: (phone: string, game_id: string, correct: boolean) =>
+  play: (phone: string, game_id: string, correct: boolean, points?: number) =>
     req<{ correct: boolean; pointsAwarded: number; balance: number; todayPlayed: boolean }>(
       '/api/play',
-      { method: 'POST', body: JSON.stringify({ phone, game_id, correct }) },
+      { method: 'POST', body: JSON.stringify({ phone, game_id, correct, points }) },
     ),
   rewards: (phone: string) =>
     req<{ balance: number; rewards: { id: number; name: string; description: string; cost_points: number; canAfford: boolean }[] }>(

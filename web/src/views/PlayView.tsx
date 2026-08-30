@@ -43,9 +43,29 @@ export default function PlayView() {
   const onComplete = async (correct: boolean) => {
     try {
       const r = await api.play(phone, gameId!, correct);
-      setMsg(`ได้ 1 แต้ม! ยอดรวม ${r.balance}`);
+      setMsg(`ได้ ${r.pointsAwarded} แต้ม! ยอดรวม ${r.balance}`);
       setPlayed(true); setBalance(r.balance);
     } catch (e: any) { setMsg(e.message); }
+  };
+
+  const onQuizComplete = async (goToFarm: boolean) => {
+    // Quiz บันทึกแต้มแล้วใน QuizGame component — แค่ refresh balance
+    try {
+      const r = await api.start(phone);
+      setBalance(r.balance);
+    } catch {}
+    if (goToFarm) {
+      nav('/play/merge');
+    }
+  };
+
+  const onMergeComplete = async (won: boolean) => {
+    // Merge ไม่มีระบบแต้มภายใน — ให้ผ่านเสมอ
+    setMsg('เล่นเสร็จแล้ว!');
+    try {
+      const r = await api.start(phone);
+      setBalance(r.balance);
+    } catch {}
   };
 
   return (
@@ -62,11 +82,28 @@ export default function PlayView() {
         </div>
       </div>
 
-      <div className="card-3d">
-        <Game onComplete={onComplete} />
-      </div>
+      {played && (
+        <div className="card result-screen" style={{ marginBottom: 'var(--space-md)' }}>
+          <div className="result-icon">✅</div>
+          <p className="result-text">{msg}</p>
+          <div className="nav-row">
+            <button className="btn btn-accent" onClick={() => nav('/rewards')}>🎁 ของรางวัล</button>
+            <button className="btn btn-secondary" onClick={() => nav('/me')}>👤 โปรไฟล์</button>
+          </div>
+        </div>
+      )}
 
-      {msg && <p className="msg-success" style={{ marginTop: 'var(--space-md)' }}>{msg}</p>}
+      {!played && gameId === 'quiz' && (
+        <Game onComplete={onQuizComplete} />
+      )}
+
+      {!played && gameId === 'merge' && (
+        <Game onComplete={onMergeComplete} />
+      )}
+
+      {!played && !['quiz', 'merge'].includes(gameId!) && (
+        <Game onComplete={onComplete} />
+      )}
     </div>
   );
 }

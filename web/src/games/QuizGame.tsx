@@ -1,6 +1,8 @@
 // web/src/games/QuizGame.tsx
-// เกมตอบคำถามชุมชนสั้นๆ — 3 ข้อปรนัย
+// เกมตอบคำถามชุมชนสั้นๆ — 3 ข้อปรนัย + บันทึกแต้มลง DB
 import { useState } from 'react';
+import { usePhone } from '../PhoneContext';
+import { api } from '../api';
 
 const QUESTIONS = [
   {
@@ -20,7 +22,8 @@ const QUESTIONS = [
   },
 ];
 
-export default function QuizGame({ onComplete }: { onComplete: (correct: boolean) => void }) {
+export default function QuizGame({ onComplete }: { onComplete: (goToFarm: boolean) => void }) {
+  const { phone } = usePhone();
   const [answers, setAnswers] = useState<(number | null)[]>([null, null, null]);
   const [result, setResult] = useState<{
     correctCount: number;
@@ -37,7 +40,7 @@ export default function QuizGame({ onComplete }: { onComplete: (correct: boolean
     setAnswers(newAnswers);
   };
 
-  const submit = () => {
+  const submit = async () => {
     if (result) return;
     let correctCount = 0;
     for (let i = 0; i < QUESTIONS.length; i++) {
@@ -62,10 +65,17 @@ export default function QuizGame({ onComplete }: { onComplete: (correct: boolean
       nextAction = 'home';
     }
 
+    // บันทึกแต้มลง DB
+    try {
+      await api.play(phone, 'quiz', correctCount > 0, points);
+    } catch (e) {
+      console.error('Failed to save score:', e);
+    }
+
     setResult({ correctCount, points, message, nextAction, perfect: correctCount === QUESTIONS.length });
 
     setTimeout(() => {
-      onComplete(nextAction === 'mini-farm' || points > 0);
+      onComplete(nextAction === 'mini-farm');
     }, 2000);
   };
 
