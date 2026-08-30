@@ -30,23 +30,6 @@ export default function GameSelectView() {
     );
   }
 
-  if (todayPlayed) {
-    return (
-      <div className="card result-screen">
-        <div className="result-icon">✅</div>
-        <p className="result-text">วันนี้เล่นแล้วครบ!</p>
-        <p className="result-sub">กลับมาเล่นใหม่พรุ่งนี้นะ</p>
-        <div className="points-badge" style={{ margin: '0 auto var(--space-xl)' }}>
-          ⭐ {balance} แต้ม
-        </div>
-        <div className="nav-row">
-          <button className="btn btn-accent" onClick={() => nav('/rewards')}>🎁 ของรางวัล</button>
-          <button className="btn btn-secondary" onClick={() => nav('/me')}>👤 โปรไฟล์</button>
-        </div>
-      </div>
-    );
-  }
-
   const games = Object.entries(registry);
 
   return (
