@@ -1,20 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800&display=swap');
 
 :root {
-  --color-primary: #7C3AED;
-  --color-primary-light: #A78BFA;
-  --color-primary-dark: #5B21B6;
+  /* 🌽 ข้าวนัวโพด — Cute Farm Theme */
+  --color-primary: #15803D;
+  --color-primary-light: #22C55E;
+  --color-primary-dark: #14532D;
   --color-on-primary: #FFFFFF;
-  --color-accent: #16A34A;
-  --color-accent-light: #22C55E;
-  --color-accent-dark: #15803D;
+  --color-accent: #A16207;
+  --color-accent-light: #CA8A04;
+  --color-accent-dark: #854D0E;
   --color-on-accent: #FFFFFF;
-  --color-bg: #FAF5FF;
+  --color-bg: #F0FDF4;
   --color-surface: #FFFFFF;
-  --color-text: #3B1F6E;
-  --color-text-muted: #6B5B8A;
-  --color-border: #DDD6FE;
-  --color-border-strong: #C4B5FD;
+  --color-text: #14532D;
+  --color-text-muted: #475569;
+  --color-border: #BBF7D0;
+  --color-border-strong: #86EFAC;
   --color-danger: #DC2626;
   --color-success: #16A34A;
   --color-warning: #F59E0B;
@@ -29,15 +30,15 @@
   --space-xl: 32px;
   --space-2xl: 40px;
 
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
   --radius-full: 9999px;
 
-  --shadow-sm: 0 1px 3px rgba(124, 58, 237, 0.08);
-  --shadow-md: 0 4px 16px rgba(124, 58, 237, 0.1);
-  --shadow-lg: 0 8px 32px rgba(124, 58, 237, 0.12);
+  --shadow-sm: 0 2px 8px rgba(21, 128, 61, 0.1);
+  --shadow-md: 0 4px 16px rgba(21, 128, 61, 0.12);
+  --shadow-lg: 0 8px 32px rgba(21, 128, 61, 0.15);
 
   --transition-fast: 150ms ease;
   --transition-normal: 200ms ease;
@@ -50,7 +51,7 @@ html { font-size: 16px; -webkit-text-size-adjust: 100%; }
 
 body {
   font-family: var(--font-family);
-  background: var(--color-bg);
+  background: linear-gradient(180deg, #F0FDF4 0%, #ECFDF5 50%, #F0FDF4 100%);
   color: var(--color-text);
   line-height: 1.6;
   min-height: 100dvh;
@@ -109,7 +110,7 @@ body {
 
 .app-header h1 {
   font-size: 1.4rem; font-weight: 800;
-  color: var(--color-primary); letter-spacing: -0.01em;
+  color: var(--color-primary-dark); letter-spacing: -0.01em;
 }
 
 .app-header .subtitle {
