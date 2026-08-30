@@ -6,12 +6,11 @@ CREATE TABLE IF NOT EXISTS players (
 
 CREATE TABLE IF NOT EXISTS plays (
   id SERIAL PRIMARY KEY,
-  player_id INTEGER NOT NULL REFERENCES players(id),
+  player_id INTEGER REFERENCES players(id),
   game_id TEXT NOT NULL,
-  played_on DATE NOT NULL,
+  played_on DATE NOT NULL DEFAULT CURRENT_DATE,
   points_awarded INTEGER NOT NULL DEFAULT 1,
-  correct BOOLEAN NOT NULL DEFAULT false,
-  UNIQUE (player_id, played_on)
+  correct BOOLEAN
 );
 
 CREATE TABLE IF NOT EXISTS rewards (

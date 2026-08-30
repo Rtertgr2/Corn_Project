@@ -23,14 +23,6 @@ playRouter.post('/play', async (req, res) => {
   if (p.length === 0) return res.status(400).json({ error: 'กรุณากรอกเบอร์ก่อนเล่น' });
   const playerId = p[0].id;
 
-  const { rows: existing } = await pool.query(
-    'SELECT 1 FROM plays WHERE player_id=$1 AND played_on=$2',
-    [playerId, today],
-  );
-  if (existing.length > 0) {
-    return res.status(409).json({ error: 'วันนี้เล่นแล้ว รอพรุ่งนี้ครับ', alreadyPlayed: true });
-  }
-
   try {
     await pool.query(
       'INSERT INTO plays (player_id, game_id, played_on, points_awarded, correct) VALUES ($1,$2,$3,1,$4)',
