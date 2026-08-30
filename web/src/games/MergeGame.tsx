@@ -1,5 +1,5 @@
 // web/src/games/MergeGame.tsx
-// เกมรวมเมล็ดแบบ Suika — physics ถูกต้อง, ไม่ลอย, ไม่ค้าง
+// เกมรวมเมล็ดแบบ Suika — user-controlled drop, no freeze, optimized physics
 import { useState, useEffect, useRef, useCallback } from 'react';
 
 type Item = {
@@ -10,7 +10,6 @@ type Item = {
   vx: number;
   vy: number;
   radius: number;
-  scale: number;
   merging: boolean;
 };
 
@@ -26,26 +25,16 @@ const TYPES = [
 
 const W = 300;
 const H = 420;
-const GRAVITY = 0.5; // เพิ่ม gravity ให้ตกเร็วขึ้น
+const GRAVITY = 0.5;
 const BOUNCE = 0.3;
 const PAD = 6;
-const MAX_ITEMS = 15;
+const MAX_ITEMS = 12;
 const TIME_LIMIT = 60;
 
 let nextId = 0;
 
 function makeItem(type: number, x: number): Item {
-  return {
-    id: nextId++,
-    type,
-    x,
-    y: 20,
-    vx: 0,
-    vy: 0,
-    radius: TYPES[type].radius,
-    scale: 1, // เริ่มที่ scale 1 เลย
-    merging: false,
-  };
+  return { id: nextId++, type, x, y: 20, vx: 0, vy: 0, radius: TYPES[type].radius, merging: false };
 }
 
 function randType(): number {
@@ -58,9 +47,9 @@ function randType(): number {
 }
 
 export default function MergeGame({ onComplete }: { onComplete: (correct: boolean) => void }) {
-  const [items, setItems] = useState<Item[]>([]);
+  const [renderTick, setRenderTick] = useState(0); // force re-render
   const [score, setScore] = useState(0);
-  const [nextType] = useState(randType());
+  const [nextType, setNextType] = useState(randType());
   const [timeLeft, setTimeLeft] = useState(TIME_LIMIT);
   const [gameOver, setGameOver] = useState(false);
   const [dropX, setDropX] = useState(W / 2);
@@ -70,9 +59,8 @@ export default function MergeGame({ onComplete }: { onComplete: (correct: boolea
   const itemsRef = useRef<Item[]>([]);
   const scoreRef = useRef(0);
   const gameOverRef = useRef(false);
+  const renderTickRef = useRef(0);
 
-  // Sync refs
-  useEffect(() => { itemsRef.current = items; }, [items]);
   useEffect(() => { scoreRef.current = score; }, [score]);
   useEffect(() => { gameOverRef.current = gameOver; }, [gameOver]);
 
@@ -93,33 +81,32 @@ export default function MergeGame({ onComplete }: { onComplete: (correct: boolea
     return () => clearInterval(t);
   }, [gameOver, onComplete]);
 
-  // Physics loop — ใช้ useRef เพื่อไม่ให้ re-render
+  // Physics loop — mutable items, minimal re-renders
   useEffect(() => {
-    const loop = () => {
-      if (gameOverRef.current) {
-        animRef.current = requestAnimationFrame(loop);
-        return;
-      }
+    let lastTime = 0;
+    let frameCount = 0;
 
-      const cur = itemsRef.current;
-      if (cur.length === 0) {
-        animRef.current = requestAnimationFrame(loop);
-        return;
-      }
+    const loop = (time: number) => {
+      animRef.current = requestAnimationFrame(loop);
+
+      if (gameOverRef.current) return;
+
+      const dt = lastTime ? Math.min((time - lastTime) / 16, 2) : 1;
+      lastTime = time;
+
+      const items = itemsRef.current;
+      if (items.length === 0) return;
 
       let changed = false;
-      const updated = cur.map(item => ({ ...item }));
 
-      for (let i = 0; i < updated.length; i++) {
-        const a = updated[i];
+      // Update physics
+      for (let i = 0; i < items.length; i++) {
+        const a = items[i];
         if (a.merging) continue;
 
-        // Apply gravity
-        a.vy += GRAVITY;
-        a.y += a.vy;
-        a.x += a.vx;
-
-        // Friction
+        a.vy += GRAVITY * dt;
+        a.y += a.vy * dt;
+        a.x += a.vx * dt;
         a.vx *= 0.99;
 
         // Wall collision
@@ -127,16 +114,8 @@ export default function MergeGame({ onComplete }: { onComplete: (correct: boolea
         const right = W - PAD - a.radius;
         const floor = H - PAD - a.radius;
 
-        if (a.x < left) {
-          a.x = left;
-          a.vx = Math.abs(a.vx) * BOUNCE;
-          changed = true;
-        }
-        if (a.x > right) {
-          a.x = right;
-          a.vx = -Math.abs(a.vx) * BOUNCE;
-          changed = true;
-        }
+        if (a.x < left) { a.x = left; a.vx = Math.abs(a.vx) * BOUNCE; changed = true; }
+        if (a.x > right) { a.x = right; a.vx = -Math.abs(a.vx) * BOUNCE; changed = true; }
         if (a.y > floor) {
           a.y = floor;
           a.vy = -Math.abs(a.vy) * BOUNCE * 0.5;
@@ -146,8 +125,8 @@ export default function MergeGame({ onComplete }: { onComplete: (correct: boolea
         }
 
         // Item collision
-        for (let j = i + 1; j < updated.length; j++) {
-          const b = updated[j];
+        for (let j = i + 1; j < items.length; j++) {
+          const b = items[j];
           if (b.merging) continue;
 
           const dx = b.x - a.x;
@@ -166,14 +145,11 @@ export default function MergeGame({ onComplete }: { onComplete: (correct: boolea
               const newItem = makeItem(a.type + 1, mx);
               newItem.y = my - 10;
               newItem.vy = -2;
-
-              // Remove old, add new
-              updated.splice(j, 1);
-              updated.splice(i, 1);
-              updated.push(newItem);
+              items.push(newItem);
 
               const pts = (a.type + 2) * 10;
-              setScore(p => p + pts);
+              scoreRef.current += pts;
+              setScore(scoreRef.current);
               changed = true;
               break;
             } else {
@@ -201,15 +177,20 @@ export default function MergeGame({ onComplete }: { onComplete: (correct: boolea
         }
       }
 
-      // Filter out merging items
-      const filtered = updated.filter(i => !i.merging);
-      if (filtered.length !== cur.length) changed = true;
-
-      if (changed) {
-        setItems(filtered);
+      // Remove merging items
+      for (let i = items.length - 1; i >= 0; i--) {
+        if (items[i].merging) {
+          items.splice(i, 1);
+          changed = true;
+        }
       }
 
-      animRef.current = requestAnimationFrame(loop);
+      // Re-render every 3 frames to reduce DOM updates
+      frameCount++;
+      if (changed && frameCount % 3 === 0) {
+        renderTickRef.current++;
+        setRenderTick(renderTickRef.current);
+      }
     };
 
     animRef.current = requestAnimationFrame(loop);
@@ -218,7 +199,7 @@ export default function MergeGame({ onComplete }: { onComplete: (correct: boolea
     };
   }, []);
 
-  // Player-controlled drop — คลิก/แตะเพื่อปล่อย
+  // Player-controlled drop
   const handlePointerMove = useCallback((e: React.PointerEvent) => {
     if (gameOver || !canDrop) return;
     const rect = containerRef.current?.getBoundingClientRect();
@@ -232,12 +213,14 @@ export default function MergeGame({ onComplete }: { onComplete: (correct: boolea
     if (itemsRef.current.length >= MAX_ITEMS) return;
 
     const newItem = makeItem(nextType, dropX);
-    setItems(prev => [...prev, newItem]);
+    itemsRef.current.push(newItem);
     setCanDrop(false);
+    setNextType(randType());
     setTimeout(() => setCanDrop(true), 300);
   }, [gameOver, canDrop, nextType, dropX]);
 
   const fmt = (s: number) => `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, '0')}`;
+  const items = itemsRef.current;
   const danger = items.some(i => i.y < 30 && !i.merging);
 
   return (
@@ -266,7 +249,7 @@ export default function MergeGame({ onComplete }: { onComplete: (correct: boolea
         <span style={{ fontSize: '0.65rem', color: 'var(--color-text-muted)' }}>ถัดไป:</span>
         <img src={TYPES[nextType].img} alt="" style={{ width: 22, height: 22, objectFit: 'contain' }} />
         <span style={{ fontSize: '0.65rem', fontWeight: 600 }}>{TYPES[nextType].name}</span>
-        <span style={{ marginLeft: 'auto', fontSize: '0.6rem', color: '#9CA3AF' }}>← ลากแล้วปล่อย →</span>
+        <span style={{ marginLeft: 'auto', fontSize: '0.6rem', color: '#9CA3AF' }}>คลิกเพื่อปล่อย</span>
       </div>
 
       {/* Danger */}
@@ -328,7 +311,6 @@ export default function MergeGame({ onComplete }: { onComplete: (correct: boolea
               height: item.radius * 2,
               objectFit: 'contain',
               pointerEvents: 'none',
-              filter: item.merging ? 'brightness(1.3)' : 'none',
             }}
           />
         ))}
