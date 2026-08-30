@@ -1,6 +1,7 @@
 // web/src/App.tsx
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { usePhone } from './PhoneContext';
+import HomeView from './views/HomeView';
 import PhoneView from './views/PhoneView';
 import GameSelectView from './views/GameSelectView';
 import PlayView from './views/PlayView';
@@ -9,7 +10,7 @@ import MeView from './views/MeView';
 
 function RequirePhone({ children }: { children: JSX.Element }) {
   const { phone } = usePhone();
-  return phone ? children : <Navigate to="/" replace />;
+  return phone ? children : <Navigate to="/login" replace />;
 }
 
 export default function App() {
@@ -28,11 +29,13 @@ export default function App() {
           <p className="subtitle">เล่นเกมส์ สะสมแต้ม แลกของรางวัล</p>
         </header>
         <Routes>
-          <Route path="/" element={<PhoneView />} />
+          <Route path="/" element={<RequirePhone><HomeView /></RequirePhone>} />
+          <Route path="/login" element={<PhoneView />} />
           <Route path="/play" element={<RequirePhone><GameSelectView /></RequirePhone>} />
           <Route path="/play/:gameId" element={<RequirePhone><PlayView /></RequirePhone>} />
           <Route path="/rewards" element={<RequirePhone><RewardsView /></RequirePhone>} />
           <Route path="/me" element={<RequirePhone><MeView /></RequirePhone>} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>
     </>

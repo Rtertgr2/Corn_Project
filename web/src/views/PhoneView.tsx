@@ -16,7 +16,7 @@ export default function PhoneView() {
     try {
       await api.start(phone);
       setPhone(phone.trim());
-      nav('/play');
+      nav('/');
     } catch (e: any) { setErr(e.message); }
     finally { setLoading(false); }
   };
