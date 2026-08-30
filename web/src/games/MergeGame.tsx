@@ -28,9 +28,9 @@ const H = 420;
 const GRAVITY = 0.4;
 const BOUNCE = 0.3;
 const PAD = 6;
-const MAX_ITEMS = 8;
+const MAX_ITEMS = 20;
 const TIME_LIMIT = 60;
-const DROP_COOLDOWN = 250; // ms ระหว่างคลิก
+const DROP_COOLDOWN = 150; // ms ระหว่างคลิก
 
 let nextId = 0;
 
@@ -84,7 +84,7 @@ export default function MergeGame({ onComplete }: { onComplete: (correct: boolea
     return () => clearInterval(t);
   }, [gameOver, onComplete]);
 
-  // Physics loop — mutable items, minimal re-renders
+  // Physics loop — optimized with spatial check
   useEffect(() => {
     let lastTime = 0;
     let frameCount = 0;
@@ -126,18 +126,29 @@ export default function MergeGame({ onComplete }: { onComplete: (correct: boolea
           if (Math.abs(a.vy) < 0.5) a.vy = 0;
           changed = true;
         }
+      }
 
-        // Item collision
+      // Item collision — only check nearby pairs (O(n²/2) but early exit)
+      for (let i = 0; i < items.length; i++) {
+        const a = items[i];
+        if (a.merging) continue;
+        
         for (let j = i + 1; j < items.length; j++) {
           const b = items[j];
           if (b.merging) continue;
 
           const dx = b.x - a.x;
           const dy = b.y - a.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
+          const distSq = dx * dx + dy * dy;
           const minDist = a.radius + b.radius;
 
-          if (dist < minDist && dist > 0.1) {
+          // Skip if too far (early exit optimization)
+          if (distSq > minDist * minDist) continue;
+          if (distSq < 0.01) continue;
+
+          const dist = Math.sqrt(distSq);
+
+          if (dist < minDist) {
             if (a.type === b.type && a.type < TYPES.length - 1) {
               // Merge
               const mx = (a.x + b.x) / 2;
@@ -188,9 +199,9 @@ export default function MergeGame({ onComplete }: { onComplete: (correct: boolea
         }
       }
 
-      // Re-render every 3 frames to reduce DOM updates
+      // Re-render every 4 frames to reduce DOM updates (was 3)
       frameCount++;
-      if (changed && frameCount % 3 === 0) {
+      if (changed && frameCount % 4 === 0) {
         renderTickRef.current++;
         setRenderTick(renderTickRef.current);
       }
