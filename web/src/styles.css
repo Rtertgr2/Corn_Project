@@ -61,6 +61,18 @@ body {
 
 #root { min-height: 100dvh; }
 
+/* ─── Grassland Background ─── */
+.grassland-bg {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  z-index: -2;
+  background-image: url('/assets/ui/bg_grassland.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.35;
+  filter: saturate(1.1) brightness(1.05);
+}
+
 /* ─── Decorative Background ─── */
 .corn-pattern {
   position: fixed; top: 0; left: 0; right: 0; bottom: 0;
@@ -86,6 +98,70 @@ body {
   max-width: 440px; margin: 0 auto;
   padding: var(--space-md); min-height: 100dvh;
   display: flex; flex-direction: column;
+}
+
+/* ─── 3D Card Effect ─── */
+.card-3d {
+  background: var(--color-surface);
+  border: 3px solid var(--color-border-strong);
+  border-radius: var(--radius-xl);
+  padding: var(--space-lg);
+  margin-bottom: var(--space-md);
+  position: relative;
+  box-shadow: 
+    0 4px 0 var(--color-border-strong),
+    0 8px 24px rgba(21, 128, 61, 0.15);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.card-3d:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 6px 0 var(--color-border-strong),
+    0 12px 32px rgba(21, 128, 61, 0.2);
+}
+
+.card-3d:active {
+  transform: translateY(2px);
+  box-shadow: 
+    0 2px 0 var(--color-border-strong),
+    0 4px 12px rgba(21, 128, 61, 0.1);
+}
+
+/* ─── 3D Button ─── */
+.btn-3d {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: var(--space-sm); min-height: 48px;
+  padding: 12px 20px;
+  font-family: var(--font-family);
+  font-size: 0.9rem; font-weight: 700;
+  border: none; border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.1s ease;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  box-shadow: 
+    0 4px 0 var(--color-primary-dark),
+    0 6px 16px rgba(21, 128, 61, 0.2);
+}
+
+.btn-3d:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 
+    0 5px 0 var(--color-primary-dark),
+    0 8px 20px rgba(21, 128, 61, 0.25);
+}
+
+.btn-3d:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: 
+    0 1px 0 var(--color-primary-dark),
+    0 2px 8px rgba(21, 128, 61, 0.15);
+}
+
+.btn-3d:disabled {
+  opacity: 0.5; cursor: not-allowed;
+  box-shadow: 0 2px 0 var(--color-primary-dark);
 }
 
 /* ─── Header ─── */

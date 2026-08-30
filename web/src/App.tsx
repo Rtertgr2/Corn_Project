@@ -15,6 +15,7 @@ function RequirePhone({ children }: { children: JSX.Element }) {
 export default function App() {
   return (
     <>
+      <div className="grassland-bg" />
       <div className="floating-corn" style={{ top: '10%', left: '5%', animationDelay: '0s' }}>🌽</div>
       <div className="floating-corn" style={{ top: '30%', right: '8%', animationDelay: '2s' }}>🌽</div>
       <div className="floating-corn" style={{ bottom: '20%', left: '10%', animationDelay: '4s' }}>🌽</div>
