@@ -60,12 +60,12 @@ export default function PlayView() {
   };
 
   const onMergeComplete = async (won: boolean) => {
-    // Merge ไม่มีระบบแต้มภายใน — ให้ผ่านเสมอ
-    setMsg('เล่นเสร็จแล้ว!');
+    // บันทึกแต้มลง DB (1 แต้มสำหรับ merge)
     try {
-      const r = await api.start(phone);
-      setBalance(r.balance);
-    } catch {}
+      const r = await api.play(phone, 'merge', won);
+      setMsg(won ? `🎉 ชนะ! ได้ ${r.pointsAwarded} แต้ม (รวม ${r.balance})` : `เสียใจด้วย ได้ ${r.pointsAwarded} แต้ม (รวม ${r.balance})`);
+      setPlayed(true); setBalance(r.balance);
+    } catch (e: any) { setMsg(e.message); }
   };
 
   return (
