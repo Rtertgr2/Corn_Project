@@ -21,8 +21,8 @@ const TYPES = [
   { name: 'ต้นกล้า', img: '/assets/corn/v2_sprout_00001__transparent.png', radius: 26 },
   { name: 'พระอาทิตย์', img: '/assets/corn/v2_young_corn_00001__transparent.png', radius: 32 },
   { name: 'ข้าวโพด', img: '/assets/corn/v2_ripe_corn_00001__transparent.png', radius: 38 },
-  { name: 'หัวใจ', img: '/assets/corn/v2_heart.png', radius: 32 },
-  { name: 'ต้นข้าวสีทอง', img: '/assets/corn/v2_golden_rice_plant.png', radius: 38 },
+  { name: 'หัวใจ', img: '/assets/corn/golden_rice.png', radius: 32 },
+  { name: 'ตันข้าวสีทอง', img: '/assets/corn/ice_cream.png', radius: 38 },
   { name: 'ไอติม', img: '/assets/corn/v2_ice_cream_new.png', radius: 44 },
   { name: 'คูปอง', img: '/assets/corn/v2_coupon.png', radius: 50 },
 ];
