@@ -23,8 +23,6 @@ const TYPES = [
   { name: 'ข้าวโพด', img: '/assets/corn/v2_ripe_corn_00001__transparent.png', radius: 38 },
   { name: 'หัวใจ', img: '/assets/corn/golden_rice.png', radius: 32 },
   { name: 'ตันข้าวสีทอง', img: '/assets/corn/ice_cream.png', radius: 38 },
-  { name: 'ไอติม', img: '/assets/corn/v2_ice_cream_new.png', radius: 44 },
-  { name: 'คูปอง', img: '/assets/corn/v2_coupon.png', radius: 50 },
 ];
 
 const W = 300;
