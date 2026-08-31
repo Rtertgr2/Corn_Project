@@ -143,12 +143,6 @@ export default function MergeGame({ onComplete }: { onComplete: (correct: boolea
               resultType = a.type + 1;
             }
 
-            // Cross-type merge: ข้าวโพด(3) + ต้นข้าวสีทอง(5) = ไอติม(6)
-            if (resultType === -1) {
-              const pair = `${Math.min(a.type, b.type)}-${Math.max(a.type, b.type)}`;
-              if (pair === '3-5') resultType = 6;
-            }
-
             if (resultType >= 0) {
               const mx = (a.x + b.x) / 2;
               const my = (a.y + b.y) / 2;
